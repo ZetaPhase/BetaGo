@@ -9,6 +9,17 @@ Android tourism app using augmented reality.
    - activity
   - google maps v2 android
 
+Part 1: The App
+- Simplistic minimalistic map from google
+- Record
+- Stop
+- Snap
+- Download
+- Upload
+
+Part 2: The Server
+The server is in the server folder of this repository. It is a simple server written using python base httpserver and was tested using localhost servers.
+
 ## Quick Start For Developers
 
 BetaGo was developed using Android Studio
