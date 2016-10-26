@@ -13,7 +13,8 @@ import json
 from urlparse import urlparse
 import os.path
 
-HOST_NAME = '10.78.15.19'
+HOST_NAME = '192.168.1.65'
+#HOST_NAME = '10.78.15.19'
 #HOST_NAME = '192.168.1.68'
 #HOST_NAME = '209.68.147.236'
 PORT_NUMBER = 80
