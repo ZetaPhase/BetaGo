@@ -21,10 +21,10 @@ DATABASE = 'database.db'
 @app.route("/", methods=["GET", "POST"])
 def hello():
     if request.method == "GET":
-        return "Hello World!"
+        return "JJ!"
     elif request.method == "POST":
         #json_string = self.rfile.read(int(self.headers.getheader('content-length')))
-        json_string = request.data   
+        json_string = request.get_json()  
         print "someone posted something"
         print json_string
         return json_string
@@ -42,4 +42,4 @@ def getTitle():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0',port="8080")
