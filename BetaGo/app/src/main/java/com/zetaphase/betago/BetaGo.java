@@ -84,10 +84,12 @@ class ReloadThread extends Thread {
         try {
             addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
             String zipCode = addresses.get(0).getPostalCode().toString();
-            String urlString = "http://192.168.1.68/getTitle?zipCode="+zipCode;
+            String urlString = "http://192.168.1.65/getTitle?zipCode="+zipCode;
+            Log.d("SOMETHING", urlString);
             HttpGet httpGet = new HttpGet(urlString);
             ResponseHandler<String> responseHandler = new BasicResponseHandler();
             String responseString = null;
+            Log.d("INRESPONSETHREAD", "responsethread");
             try {
                 responseString = client.execute(httpGet, responseHandler);
                 Log.d("RESPONSESTRING", responseString);
@@ -100,6 +102,7 @@ class ReloadThread extends Thread {
                 activity.startActivityForResult(intent, activity.MY_REQUEST_CODE);
             } catch (IOException e) {
                 e.printStackTrace();
+                Log.d("IOEXCEPTION", "IOEXCEPTION");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -232,7 +235,7 @@ class MarkerThread extends Thread {
         j.put("zipCodeList", zipCodeList);
         Log.d("MYRECORDSTRING", j.toString());
 
-        StringBuffer a = request("http://192.168.1.68", j);
+        StringBuffer a = request("http://192.168.1.65", j);
 
 
         final String response = a.toString();
@@ -368,8 +371,11 @@ public class BetaGo extends FragmentActivity implements OnMapReadyCallback {
         }else if (requestCode == 12345){
             Log.d("ACTIVITYRESULT", data.getStringExtra("Mydata"));
             String intentResult = data.getStringExtra("Mydata");
+            TelephonyManager tMgr = (TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
+            String mPhoneNumber = tMgr.getLine1Number();
+            Log.d("MPHONENUMBER", mPhoneNumber);
             final HttpClient client = new DefaultHttpClient();
-            String urlString = "http://192.168.1.68/getDetail?id="+intentResult;
+            String urlString = "http://192.168.1.65/getDetail?id="+intentResult+"&phoneNumber="+mPhoneNumber;
             Log.d("intentURL", urlString);
             final HttpGet httpGet = new HttpGet(urlString);
             final ResponseHandler<String> responseHandler = new BasicResponseHandler();
@@ -582,6 +588,7 @@ public class BetaGo extends FragmentActivity implements OnMapReadyCallback {
 
                         builder.show();
                     }else if (value=="Reload"){
+                        Log.d("CLICKEDRELOAD", "clicked reload");
                         ReloadThread thread = new ReloadThread(BetaGo.this);
                         thread.start();
                     }

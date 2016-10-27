@@ -52,11 +52,12 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler): # set up handler
                             self.zipDictionary[zipCode] = [json.loads(string)["phone"]+json.loads(string)["title"]]
         if path == '/getDetail':
             idName = query_components['id']
+            phoneNumber = query_components['phoneNumber']
             self.send_response(200)
             self.send_header("Content-type", "text/html")
             self.end_headers()
-            print self.dictionary[idName]
-            self.wfile.write(self.dictionary[idName])
+            #print self.dictionary[idName]
+            self.wfile.write(self.dictionary[phoneNumber+idName])
         elif path == '/getTitle':
             zipCode = query_components['zipCode']
             resultString = ""

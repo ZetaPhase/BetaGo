@@ -19,6 +19,7 @@ public class ReloadListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("INRELOADACTIVITY", "INRELOAD");
         setContentView(R.layout.activity_reload_list);
 
         Intent intent = getIntent();
