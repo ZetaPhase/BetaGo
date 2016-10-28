@@ -12,7 +12,7 @@ import flask
 from flask import Flask
 from flask import g
 from flask import request
-
+from flask import jsonify
 
 app = Flask(__name__)
 
@@ -20,26 +20,46 @@ DATABASE = 'database.db'
 
 @app.route("/", methods=["GET", "POST"])
 def hello():
-    if request.method == "GET":
-        return "JJ!"
-    elif request.method == "POST":
-        #json_string = self.rfile.read(int(self.headers.getheader('content-length')))
-        json_string = request.get_json()  
+    #if request.method == "GET":
+    print "someone said get"
+    return "JJ!"
+    '''
+    if request.method == "POST":
+        content = request.get_json(silent=True)
+        print content
         print "someone posted something"
-        print json_string
-        return json_string
+        return ""
+    '''
+
+@app.route("/json", methods=['GET', 'POST'])
+def json():
+    #print request.data
+    #print jsonify(request.get_json(force=True))
+    print (request)
+    print (str(request.form))
+    print (request.form)
+    print (request.args.to_dict(flat=False))
+    print ("request.json" + str(request.json))
+    print ("request.data" + str(request.data))
+    print ("request.get_json()" + str(request.get_json()))
+    print ("request.get_data()" + str(request.get_data()))
+    print ("reqyest.get_data(force=True)" + str(request.get_json(force=True)))
+    return request.json
 
 @app.route("/getDetail", methods=["GET", "POST"])
 def getDetail():
     if request.method == "GET":
+        print "someone got some detail"
         return "You have gotten some detail"
 
 @app.route("/getTitle", methods=["GET", "POST"])
 def getTitle():
     if request.method == "GET":
+        print "someone got some title"
         return "You have gotten some title"
 
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0',port="8080")
+    app.run(host='0.0.0.0', port=80)
+    #app.run(host='0.0.0.0',port="80")

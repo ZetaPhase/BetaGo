@@ -235,7 +235,7 @@ class MarkerThread extends Thread {
         j.put("zipCodeList", zipCodeList);
         Log.d("MYRECORDSTRING", j.toString());
 
-        StringBuffer a = request("http://192.168.1.65", j);
+        StringBuffer a = request("http://192.168.1.65/json", j);
 
 
         final String response = a.toString();
