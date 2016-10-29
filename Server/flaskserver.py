@@ -13,6 +13,8 @@ from flask import Flask
 from flask import g
 from flask import request
 from flask import jsonify
+#from werkzeug.datastructures import ImmutableMultiDict
+import ast
 
 app = Flask(__name__)
 
@@ -35,15 +37,13 @@ def hello():
 def json():
     #print request.data
     #print jsonify(request.get_json(force=True))
-    print (request)
-    print (str(request.form))
-    print (request.form)
-    print (request.args.to_dict(flat=False))
-    print ("request.json" + str(request.json))
-    print ("request.data" + str(request.data))
-    print ("request.get_json()" + str(request.get_json()))
-    print ("request.get_data()" + str(request.get_data()))
-    print ("reqyest.get_data(force=True)" + str(request.get_json(force=True)))
+    #print (request)
+    #print (str(request.form))
+    #print (request.form)
+    dickeys = request.form.keys()
+    dic = ast.literal_eval(dickeys[0])
+    print(dic)
+    #dic = dict(request.form) 
     return request.json
 
 @app.route("/getDetail", methods=["GET", "POST"])
