@@ -36,4 +36,4 @@ Check out my blog for some tutorials on Google Maps V2 Android
 
 
 (c) 2016, ZetaPhase Technologies, All Rights Reserved.
-- Licensed under GPLV3
+- Licensed under GPLV3.
