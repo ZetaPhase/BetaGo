@@ -20,6 +20,7 @@ Part 1: The App
 
 Part 2: The Server
 The server is in the server folder of this repository. It is a simple server written using python base httpserver and was tested using localhost servers.
+-. Built with flask
 
 ## Quick Start For Developers
 
