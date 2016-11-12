@@ -5,9 +5,7 @@ Created on Tue Oct 25 14:49:32 2016
 @author: Dave Ho
 """
 
-#HOST&&PORT: http://127.0.0.1:5000/ : LOCALHOST
-
-#IMPORTS
+#HOST&&PORT: http://127.0.0.1:5000/
 
 import sqlite3
 import flask
