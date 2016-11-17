@@ -38,8 +38,14 @@ def json():
     dickeys = request.form.keys()
     dic = ast.literal_eval(dickeys[0])
     print(dic)
-    print(type(dic))
-    print(dic['phone'])
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    c.execute("INSERT INTO users VALUES('"+dic['phone']+"', '"+dic['phone']+"')")
+    c.execute('SELECT SUM(pid) FROM path')
+    count = c.fetchone()[0]
+    c.execute("INSERT INTO path VALUES('"+count+"', '"+dic['phone']+"', '"+dic['title']+"', '"+dic['zipCodeList'][0]+"')")
+    return request.json
+
 @app.route("/getDetail", methods=["GET", "POST"])
 def getDetail():
     if request.method == "GET":
