@@ -44,6 +44,8 @@ def json():
     c.execute('SELECT SUM(pid) FROM path')
     count = c.fetchone()[0]
     c.execute("INSERT INTO path VALUES('"+count+"', '"+dic['phone']+"', '"+dic['title']+"', '"+dic['zipCodeList'][0]+"')")
+    for i in range(0, len(dic['lat'])):
+        c.execute("INSERT INTO points VALUES('"+count+"', '"+dic['lat'][i]+"', '"+dic['lng'][i]+"', '"+i+"')")
     return request.json
 
 @app.route("/getDetail", methods=["GET", "POST"])
