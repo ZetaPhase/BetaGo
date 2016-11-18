@@ -8,7 +8,7 @@ Android tourism app using augmented reality.
    - camera
    - activity
 
--google maps v2 android.
+-google maps v2 android
 
 Part 1: The App
 - Simplistic minimalistic map from google
