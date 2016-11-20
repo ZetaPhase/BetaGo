@@ -30,7 +30,7 @@ def hello():
         content = request.get_json(silent=True)
         print content
         print "someone posted something"
-        return ""
+        return. ""
     '''
 
 @app.route("/json", methods=['GET', 'POST'])
