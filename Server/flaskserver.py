@@ -47,6 +47,10 @@ def json():
     for i in range(0, len(dic['lat'])):
         c.execute("INSERT INTO points VALUES('"+count+"', '"+dic['lat'][i]+"', '"+dic['lng'][i]+"', '"+i+"')")
     return request.json
+    for i in range(0, len(dic['markerMap'].keys())):
+        key = sorted(dic['markerMap'].keys())[i]
+        c.execute("INSERT INTO markers VALUES('"+i+"', '"+key['lat']+"', '"+key['lng']+"', '"+key['description']+"', '"+key['image']+"')")
+        
 
 @app.route("/getDetail", methods=["GET", "POST"])
 def getDetail():
