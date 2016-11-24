@@ -40,17 +40,31 @@ def json():
     print(dic)
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
+    print("connected")
+    print "INSERT INTO users VALUES('"+dic['phone']+"', '"+dic['phone']+"')"
     c.execute("INSERT INTO users VALUES('"+dic['phone']+"', '"+dic['phone']+"')")
-    c.execute('SELECT SUM(pid) FROM path')
+    print("users done")
+    c.execute('SELECT COUNT(pid) FROM path')
     count = c.fetchone()[0]
-    c.execute("INSERT INTO path VALUES('"+count+"', '"+dic['phone']+"', '"+dic['title']+"', '"+dic['zipCodeList'][0]+"')")
+    print count
+    print type(count)
+    print dic['phone']
+    print dic['title']
+    print dic['zipCodeList'][0]
+    print "INSERT INTO path VALUES('"+str(count)+"')"
+    c.execute("INSERT INTO path VALUES('"+str(count)+"', '"+dic['phone']+"', '"+dic['title']+"', '"+dic['zipCodeList'][0]+"')")
+    print("path done")    
     for i in range(0, len(dic['lat'])):
-        c.execute("INSERT INTO points VALUES('"+count+"', '"+dic['lat'][i]+"', '"+dic['lng'][i]+"', '"+i+"')")
-    return request.json
+        c.execute("INSERT INTO points VALUES('"+str(count)+"', '"+str(dic['lat'][i])+"', '"+str(dic['lng'][i])+"', '"+str(i)+"')")
+    print("points done")
     for i in range(0, len(dic['markerMap'].keys())):
         key = sorted(dic['markerMap'].keys())[i]
-        c.execute("INSERT INTO markers VALUES('"+i+"', '"+key['lat']+"', '"+key['lng']+"', '"+key['description']+"', '"+key['image']+"')")
-        
+        c.execute("INSERT INTO markers VALUES('"+str(count)+"', '"+str(dic['markerMap'][key]['lat'])+"', '"+str(dic['markerMap'][key]['lng'])+"', '"+dic['markerMap'][key]['description']+"', '"+dic['markerMap'][key]['image']+"')")
+    print("markers done")
+    conn.commit()
+    conn.close()
+    print("connection closed")
+    return request.json
 
 @app.route("/getDetail", methods=["GET", "POST"])
 def getDetail():
