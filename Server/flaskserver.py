@@ -59,6 +59,10 @@ def json():
     print("points done")
     for i in range(0, len(dic['markerMap'].keys())):
         key = sorted(dic['markerMap'].keys())[i]
+        print key
+        print str(dic['markerMap'][key]['lat'])
+        print str(key['lng'])
+        print key['description']
         c.execute("INSERT INTO markers VALUES('"+str(count)+"', '"+str(dic['markerMap'][key]['lat'])+"', '"+str(dic['markerMap'][key]['lng'])+"', '"+dic['markerMap'][key]['description']+"', '"+dic['markerMap'][key]['image']+"')")
     print("markers done")
     conn.commit()
