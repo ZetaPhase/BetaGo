@@ -46,12 +46,6 @@ def json():
     print("users done")
     c.execute('SELECT COUNT(pid) FROM path')
     count = c.fetchone()[0]
-    print count
-    print type(count)
-    print dic['phone']
-    print dic['title']
-    print dic['zipCodeList'][0]
-    print "INSERT INTO path VALUES('"+str(count)+"')"
     c.execute("INSERT INTO path VALUES('"+str(count)+"', '"+dic['phone']+"', '"+dic['title']+"', '"+dic['zipCodeList'][0]+"')")
     print("path done")    
     for i in range(0, len(dic['lat'])):
