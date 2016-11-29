@@ -37,7 +37,6 @@ def hello():
 def json():
     dickeys = request.form.keys()
     dic = ast.literal_eval(dickeys[0])
-    print(dic)
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
     print("connected")
