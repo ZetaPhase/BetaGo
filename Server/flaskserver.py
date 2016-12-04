@@ -55,12 +55,16 @@ def json():
 @app.route("/getDetail", methods=["GET", "POST"])
 def getDetail():
     if request.method == "GET":
+        conn = sqlite3.connect('database.db')
+        c = conn.cursor()
+        # need to return titles back to android user from database
         print "someone got some detail"
         return "You have gotten some detail"
 
 @app.route("/getTitle", methods=["GET", "POST"])
 def getTitle():
     if request.method == "GET":
+        # need to return full details back to android user from database
         print "someone got some title"
         return "You have gotten some title"
 
