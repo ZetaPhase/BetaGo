@@ -60,6 +60,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -302,7 +303,7 @@ class RecordTask extends TimerTask {
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    activity.mMap.addPolyline(new PolylineOptions()
+                    activity.map.addPolyline(new PolylineOptions()
                             .addAll(tmpPolylist)
                             .width(12)
                             .color(Color.parseColor("#05b1fb"))
@@ -338,22 +339,22 @@ public class BetaGoActivity extends FragmentActivity implements OnMapReadyCallba
     public static final String EXTRA_MESSAGE = "com.zetaphase.betago.MESSAGE";
     public static final int MY_REQUEST_CODE = 12345;
     public static final int CAM_REQUEST = 7850;
-    public GoogleMap mMap;
+    private final String serverAddress = "192.168.1.65";
+    public GoogleMap map;
     LocationManager lm;
     List<LatLng> locationRecord = new ArrayList<>();
     LatLng recordPrevious = null;
     List<Double> markerLat = new ArrayList<>();
     List<Double> markerLng = new ArrayList<>();
     List<String> descriptions = new ArrayList<>();
-    HashMap<String, String> imageMap = new HashMap<>();
+    Map<String, String> imageMap = new HashMap<>();
+    String recordName = "Untitled";
     private double[] latlist = new double[ARRAY_SIZE];
     private double[] longlist = new double[ARRAY_SIZE];
     private int pointer = 0;
     private Marker marker;
     private HashMap<String, Marker> markerMap = new HashMap<>();
-    String recordName = "Untitled";
     private int snapNumber = 1;
-    private String reloadName = "";
     private String snapName;
     private Timer recordTimer;
     private ListView mDrawerList;
@@ -380,7 +381,7 @@ public class BetaGoActivity extends FragmentActivity implements OnMapReadyCallba
             String mPhoneNumber = tMgr.getLine1Number();
             Log.d("MPHONENUMBER", mPhoneNumber);
             final HttpClient client = new DefaultHttpClient();
-            String urlString = "http://192.168.1.65/getDetail?id=" + intentResult + "&phoneNumber=" + mPhoneNumber;
+            String urlString = "http://" + serverAddress + "/getDetail?id=" + intentResult + "&phoneNumber=" + mPhoneNumber;
             Log.d("intentURL", urlString);
             final HttpGet httpGet = new HttpGet(urlString);
             final ResponseHandler<String> responseHandler = new BasicResponseHandler();
@@ -404,7 +405,7 @@ public class BetaGoActivity extends FragmentActivity implements OnMapReadyCallba
                             BetaGoActivity.this.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mMap.addPolyline(new PolylineOptions()
+                                    map.addPolyline(new PolylineOptions()
                                             .addAll(tmpReloadPath)
                                             .width(12)
                                             .color(color)
@@ -427,7 +428,7 @@ public class BetaGoActivity extends FragmentActivity implements OnMapReadyCallba
                                 BetaGoActivity.this.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        mMap.addMarker(new MarkerOptions().position(new LatLng(mlat, mlng)).title(key).snippet(description));
+                                        map.addMarker(new MarkerOptions().position(new LatLng(mlat, mlng)).title(key).snippet(description));
                                     }
                                 });
                             }
@@ -471,17 +472,16 @@ public class BetaGoActivity extends FragmentActivity implements OnMapReadyCallba
         if (!folder.exists()) {
             folder.mkdir();
         }
-        //File image_file = new File(folder, "snap.jpg");
-        File image_file = new File(folder, fileName);
-        return image_file;
+        File imageFile = new File(folder, fileName);
+        return imageFile;
     }
 
     @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        if (mMap != null) {
-            mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+        map = googleMap;
+        if (map != null) {
+            map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
 
                 @Override
                 public View getInfoWindow(Marker marker) {
@@ -506,7 +506,7 @@ public class BetaGoActivity extends FragmentActivity implements OnMapReadyCallba
 
             });
         }
-        mMap.setPadding(0, 2170, 0, 0);
+        map.setPadding(0, 2170, 0, 0);
         // Request location permission
         new Permissive.Request(android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION)
                 .whenPermissionsGranted(new PermissionsGrantedListener() {
@@ -536,7 +536,7 @@ public class BetaGoActivity extends FragmentActivity implements OnMapReadyCallba
     }
 
     public void prepareMap() {
-        mMap.setMyLocationEnabled(true);
+        map.setMyLocationEnabled(true);
         this.lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Location location = this.lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         Log.d("LM", String.valueOf(location));
@@ -562,9 +562,10 @@ public class BetaGoActivity extends FragmentActivity implements OnMapReadyCallba
                             recordTimer = null;
                         }
                     } else if (value == "Snap") {
+                        String pictureExtension = ".jpg";
                         Intent camera_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        File file = getFile("Snap" + snapNumber + ".jpg");
-                        snapName = "Snap" + snapNumber + ".jpg";
+                        File file = getFile("Snap" + snapNumber + pictureExtension);
+                        snapName = "Snap" + snapNumber + pictureExtension;
                         //camera_intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
                         if (camera_intent.resolveActivity(getPackageManager()) != null) {
                             startActivityForResult(camera_intent, CAM_REQUEST);
@@ -580,7 +581,7 @@ public class BetaGoActivity extends FragmentActivity implements OnMapReadyCallba
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Location currentLoc = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                                Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(currentLoc.getLatitude(), currentLoc.getLongitude())).title("Snap" + String.valueOf(snapNumber)));
+                                Marker marker = map.addMarker(new MarkerOptions().position(new LatLng(currentLoc.getLatitude(), currentLoc.getLongitude())).title("Snap" + String.valueOf(snapNumber)));
                                 snapNumber += 1;
                                 marker.setSnippet(input.getText().toString());
                                 markerLat.add(currentLoc.getLatitude());
@@ -632,7 +633,7 @@ public class BetaGoActivity extends FragmentActivity implements OnMapReadyCallba
             final double longitude = location.getLongitude();
             final double latitude = location.getLatitude();
             LatLng loc = new LatLng(latitude, longitude);
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
+            map.moveCamera(CameraUpdateFactory.newLatLng(loc));
         }
     }
 }
