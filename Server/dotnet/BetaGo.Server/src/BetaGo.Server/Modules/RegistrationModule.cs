@@ -6,6 +6,9 @@ using System.Security;
 
 namespace BetaGo.Server.Modules
 {
+    /// <summary>
+    /// Registration functionality
+    /// </summary>
     public class RegistrationModule : NancyModule
     {
         public RegistrationModule()

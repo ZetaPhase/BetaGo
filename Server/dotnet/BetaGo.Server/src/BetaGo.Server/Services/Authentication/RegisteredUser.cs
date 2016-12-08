@@ -3,6 +3,9 @@ using System;
 
 namespace BetaGo.Server.Services.Authentication
 {
+    /// <summary>
+    /// Represents a user who is registered and on record in the database.
+    /// </summary>
     public class RegisteredUser
     {
         public string Username { get; set; }

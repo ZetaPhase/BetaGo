@@ -4,6 +4,9 @@ using System.Security;
 
 namespace BetaGo.Server.Services.Authentication
 {
+    /// <summary>
+    /// A user manager service. Provides access to common operations with users, and abstracts the database
+    /// </summary>
     public class WebUserManager
     {
         public RegisteredUser FindUserByUsername(string username)
@@ -48,16 +51,16 @@ namespace BetaGo.Server.Services.Authentication
             {
                 var registeredUsers = db.GetCollection<RegisteredUser>(DatabaseAccessService.UsersCollectionDatabaseKey);
                 // TODO: Maybe calculate cryptographic info
-                //Create user
+                // Create user
                 newUserRecord = new RegisteredUser
                 {
                     Username = regRequest.Username,
                     PhoneNumber = regRequest.PhoneNumber
                 };
-                //Add the user to the database
+                // Add the user to the database
                 registeredUsers.Insert(newUserRecord);
 
-                //Index database
+                // Index database
                 registeredUsers.EnsureIndex(x => x.Identifier);
             }
             return newUserRecord;
