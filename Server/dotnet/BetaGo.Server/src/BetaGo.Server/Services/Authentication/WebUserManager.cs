@@ -1,4 +1,6 @@
-﻿using BetaGo.Server.Services.Database;
+﻿using BetaGo.Server.DataModels.Registration;
+using BetaGo.Server.Services.Database;
+using System.Security;
 
 namespace BetaGo.Server.Services.Authentication
 {
@@ -29,6 +31,35 @@ namespace BetaGo.Server.Services.Authentication
                 result = registeredUsers.Update(currentUser);
             }
             return result;
+        }
+
+        /// <summary>
+        /// Attempts to register a new user. Only the username is validated, it is expected that other fields have already been validated!
+        /// </summary>
+        public RegisteredUser RegisterUser(RegistrationRequest regRequest)
+        {
+            RegisteredUser newUserRecord = null;
+            if (FindUserByUsername(regRequest.Username) != null)
+            {
+                //BAD! Another conflicting user exists!
+                throw new SecurityException("A user with the same username already exists!");
+            }
+            using (var db = new DatabaseAccessService().OpenOrCreateDefault())
+            {
+                var registeredUsers = db.GetCollection<RegisteredUser>(DatabaseAccessService.UsersCollectionDatabaseKey);
+                // TODO: Maybe calculate cryptographic info
+                //Create user
+                newUserRecord = new RegisteredUser
+                {
+                    Username = regRequest.Username,
+                };
+                //Add the user to the database
+                registeredUsers.Insert(newUserRecord);
+
+                //Index database
+                registeredUsers.EnsureIndex(x => x.Identifier);
+            }
+            return newUserRecord;
         }
     }
 }
