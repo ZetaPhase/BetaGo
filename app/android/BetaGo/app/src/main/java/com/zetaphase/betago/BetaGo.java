@@ -522,7 +522,7 @@ public class BetaGo extends FragmentActivity implements OnMapReadyCallback {
                     @Override
                     public void onPermissionsRefused(String[] permissions) {
                         // no location permission
-                        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(BetaGo.this);
 
                         dialog.setTitle("Error")
                                 .setMessage("BetaGo requires location permission to function. Please ensure that location is available to BetaGo.")
