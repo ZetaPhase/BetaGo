@@ -53,7 +53,9 @@ Check out my blog for some tutorials on Google Maps V2 Android
 
 - <http://principal-programming-fundamentals.blogspot.com/>
 
+## License and Copyrights
 
-(c) 2016, ZetaPhase Technologies, All Rights Reserved.
+&copy; 2016 ZetaPhase Technologies. All Rights Reserved.  
+&copy; 2016 0xFireball. All Rights Reserved.  
 
 Licensed under the GPLv3.
