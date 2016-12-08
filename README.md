@@ -25,10 +25,17 @@ APIs utilized
 - Download
 - Upload
 
-### Part 2: The Server
+### Part 2: The server
 
-The server is in the server folder of this repository. It is a simple server written using python base httpserver and was tested using localhost servers.
--. Built with flask
+Servers are located in `Server/` in the repository.
+
+Right now, there are 2 server implementations in place.
+
+- A Python server built with Flask, using SQLite as a backend
+- An ASP.NET Core server that uses LiteDB (MongoDB-like database) as a backend
+
+For now, we're still using the Python server, but plan to eventually
+replace it with the ASP.NET Core server for scalability and performance.
 
 ## Quick Start For Developers
 
