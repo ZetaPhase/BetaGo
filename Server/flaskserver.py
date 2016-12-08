@@ -39,14 +39,12 @@ def json():
     dic = ast.literal_eval(dickeys[0])
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
-    c.execute("INSERT INTO users VALUES('"+dic['phone']+"', '"+dic['phone']+"')")
-    # Needs try and except block
-    '''
     try:
         c.execute("INSERT INTO users VALUES('"+dic['phone']+"', '"+dic['phone']+"')")
     except sqlite3.IntegrityError:
-        do the rest
-    '''
+        pass
+    #c.execute("INSERT INTO users VALUES('"+dic['phone']+"', '"+dic['phone']+"')")
+    # Needs try and except block
     c.execute('SELECT COUNT(pid) FROM path')
     count = c.fetchone()[0]
     c.execute("INSERT INTO path VALUES('"+str(count)+"', '"+dic['phone']+"', '"+dic['title']+"', '"+dic['zipCodeList'][0]+"')")   
