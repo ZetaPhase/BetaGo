@@ -12,6 +12,8 @@ namespace BetaGo.Server.Modules
             {
                 var req = this.Bind<RegistrationRequest>();
 
+
+
                 // Return just the 200 for now
                 return new Response();
             });
