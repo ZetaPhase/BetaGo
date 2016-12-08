@@ -510,7 +510,7 @@ public class BetaGo extends FragmentActivity implements OnMapReadyCallback {
         }
         mMap.setPadding(0, 2170, 0, 0);
         // Request location permission
-        new Permissive.Request(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
+        new Permissive.Request(android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION)
                 .whenPermissionsGranted(new PermissionsGrantedListener() {
                     @Override
                     public void onPermissionsGranted(String[] permissions) throws SecurityException {
@@ -522,6 +522,16 @@ public class BetaGo extends FragmentActivity implements OnMapReadyCallback {
                     @Override
                     public void onPermissionsRefused(String[] permissions) {
                         // no location permission
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+                        dialog.setTitle("Error")
+                                .setMessage("BetaGo requires location permission to function. Please ensure that location is available to BetaGo.")
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialoginterface, int i) {
+                                        // close activity
+                                        finish();
+                                    }
+                                }).show();
                     }
                 })
                 .execute(this);
