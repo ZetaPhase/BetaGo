@@ -41,7 +41,8 @@ namespace BetaGo.Server.Modules
                 catch (SecurityException secEx)
                 {
                     // Registration blocked for security reasons
-                    return new Response().WithStatusCode(HttpStatusCode.Unauthorized);
+                    return Response.AsText(secEx.Message)
+                        .WithStatusCode(HttpStatusCode.Unauthorized);
                 }
 
                 // Return just the 200 for now
