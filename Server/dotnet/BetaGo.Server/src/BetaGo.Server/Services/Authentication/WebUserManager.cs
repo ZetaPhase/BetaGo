@@ -52,6 +52,7 @@ namespace BetaGo.Server.Services.Authentication
                 newUserRecord = new RegisteredUser
                 {
                     Username = regRequest.Username,
+                    PhoneNumber = regRequest.PhoneNumber
                 };
                 //Add the user to the database
                 registeredUsers.Insert(newUserRecord);

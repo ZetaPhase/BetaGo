@@ -2,6 +2,7 @@
 using BetaGo.Server.Services.Authentication;
 using Nancy;
 using Nancy.ModelBinding;
+using System.Security;
 
 namespace BetaGo.Server.Modules
 {
@@ -13,9 +14,22 @@ namespace BetaGo.Server.Modules
             {
                 var req = this.Bind<RegistrationRequest>();
 
-                var userManagerConn = new WebUserManager();
-                // Validate registration
-                
+                // TODO: Validate parameters!
+
+                // Valdiate username charset
+                // Validate phone number
+
+                try
+                {
+                    var userManagerConn = new WebUserManager();
+                    // Validate registration
+                    userManagerConn.RegisterUser(req);
+                }
+                catch (SecurityException secEx)
+                {
+                    // Registration blocked for security reasons
+                    return new Response().WithStatusCode(HttpStatusCode.Unauthorized);
+                }
 
                 // Return just the 200 for now
                 return new Response();
