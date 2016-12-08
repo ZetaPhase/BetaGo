@@ -56,6 +56,6 @@ Check out my blog for some tutorials on Google Maps V2 Android
 ## License and Copyrights
 
 &copy; 2016 ZetaPhase Technologies. All Rights Reserved.  
-- Made in Collaboration with 0xFireball.
+&copy; 2016 0xFireball. All Rights Reserved. - (Outside Collaborator)
 
 Licensed under the GPLv3.
