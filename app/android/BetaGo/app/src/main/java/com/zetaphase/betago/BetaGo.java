@@ -30,6 +30,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.jksiezni.permissive.PermissionsGrantedListener;
+import com.github.jksiezni.permissive.PermissionsRefusedListener;
+import com.github.jksiezni.permissive.Permissive;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -506,6 +509,25 @@ public class BetaGo extends FragmentActivity implements OnMapReadyCallback {
             });
         }
         mMap.setPadding(0, 2170, 0, 0);
+        // Request location permission
+        new Permissive.Request(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
+                .whenPermissionsGranted(new PermissionsGrantedListener() {
+                    @Override
+                    public void onPermissionsGranted(String[] permissions) throws SecurityException {
+                        // location permission granted
+                        prepareMap();
+                    }
+                })
+                .whenPermissionsRefused(new PermissionsRefusedListener() {
+                    @Override
+                    public void onPermissionsRefused(String[] permissions) {
+                        // no location permission
+                    }
+                })
+                .execute(this);
+    }
+
+    public void prepareMap() {
         mMap.setMyLocationEnabled(true);
         this.lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Location location = this.lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
