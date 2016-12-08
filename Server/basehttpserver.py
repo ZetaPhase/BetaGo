@@ -13,10 +13,7 @@ import json
 from urlparse import urlparse
 import os.path
 
-HOST_NAME = '192.168.1.65'
-#HOST_NAME = '10.78.15.19'
-#HOST_NAME = '192.168.1.68'
-#HOST_NAME = '209.68.147.236'
+HOST_NAME = '0.0.0.0'
 PORT_NUMBER = 80
 
 class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler): # set up handler
@@ -28,7 +25,6 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler): # set up handler
         self.end_headers()
         
     def do_GET(self):
-        #file = open('myfile.dat', 'w+')
         print self.path
         query = urlparse(self.path).query
         path = urlparse(self.path).path
