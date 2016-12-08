@@ -1,4 +1,7 @@
-﻿{
+{
+  "title": "BetaGo.Server",
+  "copyright": "Copyright (c) 2016 0xFireball",
+  "description": "BetaGo Server",
   "dependencies": {
     "Microsoft.NETCore.App": {
       "version": "1.0.1",
