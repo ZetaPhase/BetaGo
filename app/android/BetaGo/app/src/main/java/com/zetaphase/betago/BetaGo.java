@@ -333,9 +333,9 @@ class FirstTask extends TimerTask {
 public class BetaGo extends FragmentActivity implements OnMapReadyCallback {
 
     public static final int ARRAY_SIZE = 10;
-    public static String EXTRA_MESSAGE = "com.zetaphase.betago.MESSAGE";
-    public static int MY_REQUEST_CODE = 12345;
-    public static int CAM_REQUEST = 7850;
+    public static final String EXTRA_MESSAGE = "com.zetaphase.betago.MESSAGE";
+    public static final int MY_REQUEST_CODE = 12345;
+    public static final int CAM_REQUEST = 7850;
     public GoogleMap mMap;
     public double[] latlist = new double[ARRAY_SIZE];
     public double[] longlist = new double[ARRAY_SIZE];
@@ -359,17 +359,19 @@ public class BetaGo extends FragmentActivity implements OnMapReadyCallback {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 7850) {
+        if (requestCode == CAM_REQUEST) {
             Log.d("CAMERAINTENT", String.valueOf(data));
             Bundle extras = data.getExtras();
             Bitmap myBitmap = (Bitmap) extras.get("data");
             Log.d("IMAGEBITMAP", String.valueOf(myBitmap));
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            myBitmap.compress(Bitmap.CompressFormat.JPEG, 20, baos);
+            if (myBitmap != null) {
+                myBitmap.compress(Bitmap.CompressFormat.JPEG, 20, baos);
+            }
             byte[] byteImage_photo = baos.toByteArray();
             String encodedImage = Base64.encodeToString(byteImage_photo, Base64.DEFAULT);
             imageMap.put(snapName, encodedImage);
-        } else if (requestCode == 12345) {
+        } else if (requestCode == MY_REQUEST_CODE) {
             Log.d("ACTIVITYRESULT", data.getStringExtra("Mydata"));
             String intentResult = data.getStringExtra("Mydata");
             TelephonyManager tMgr = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
