@@ -14,6 +14,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.telephony.TelephonyManager;
@@ -464,7 +465,7 @@ public class BetaGo extends FragmentActivity implements OnMapReadyCallback {
 
 
     private File getFile(String fileName) {
-        File folder = new File("sdcard/camera_app");
+        File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/camera_app");
 
         if (!folder.exists()) {
             folder.mkdir();
