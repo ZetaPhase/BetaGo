@@ -36,13 +36,13 @@ public class ReloadListActivity extends AppCompatActivity {
         registerClickCallback();
     }
 
-    private void populateListView(){
+    private void populateListView() {
         String[] myItems = {"Blue", "Green", "Purple", "Red"};
         String lines[] = message.split("\\r?\\n");
         String[] myLines = new String[lines.length];
         Log.d("LINES", String.valueOf(lines));
         Log.d("LINES", String.valueOf(lines.length));
-        for(int i=0; i<lines.length; i++){
+        for (int i = 0; i < lines.length; i++) {
             myLines[i] = lines[i].substring(12);
         }
         Log.d("MYLINES", String.valueOf(myLines));
@@ -52,11 +52,11 @@ public class ReloadListActivity extends AppCompatActivity {
         list.setAdapter(adapter);
     }
 
-    private void registerClickCallback(){
+    private void registerClickCallback() {
         ListView list = (ListView) findViewById(R.id.listView);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long id){
+            public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long id) {
                 TextView textView = (TextView) viewClicked;
                 String message = "You clicked # " + position + ", which is string: " + textView.getText().toString();
                 Toast.makeText(ReloadListActivity.this, message, Toast.LENGTH_LONG).show();
