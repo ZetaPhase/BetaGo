@@ -1,4 +1,4 @@
-package com.zetaphase.betago;
+package com.zetaphase.betago; // The SDK Platform tools version (24) may be too old
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
