@@ -30,6 +30,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.jksiezni.permissive.PermissionsGrantedListener;
+import com.github.jksiezni.permissive.PermissionsRefusedListener;
+import com.github.jksiezni.permissive.Permissive;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -57,6 +60,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -68,9 +72,9 @@ import cz.msebera.android.httpclient.impl.client.BasicResponseHandler;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 
 class ReloadThread extends Thread {
-    private BetaGo activity;
+    private BetaGoActivity activity;
 
-    ReloadThread(BetaGo activity) {
+    ReloadThread(BetaGoActivity activity) {
         this.activity = activity;
     }
 
@@ -114,14 +118,14 @@ class ReloadThread extends Thread {
 }
 
 class MarkerThread extends Thread {
-    private BetaGo activity;
+    private BetaGoActivity activity;
 
-    MarkerThread(BetaGo activity) {
+    MarkerThread(BetaGoActivity activity) {
         this.activity = activity;
     }
 
     private static HashMap<String, String> helperMap(String t) throws JSONException {
-        HashMap<String, String> map = new HashMap<String, String>();
+        HashMap<String, String> map = new HashMap<>();
         JSONObject jObject = new JSONObject(t);
         Iterator<?> keys = jObject.keys();
 
@@ -137,7 +141,7 @@ class MarkerThread extends Thread {
 
     public static HashMap<String, HashMap<String, String>> jsonToMap(String t) throws JSONException {
 
-        HashMap<String, HashMap<String, String>> map = new HashMap<String, HashMap<String, String>>();
+        HashMap<String, HashMap<String, String>> map = new HashMap<>();
         JSONObject jObject = new JSONObject(t);
         Iterator<?> keys = jObject.keys();
 
@@ -210,13 +214,13 @@ class MarkerThread extends Thread {
 
         JSONArray latList = new JSONArray();
         JSONArray lngList = new JSONArray();
-        for (int i = 0; i < activity.myRecord.size(); i++) {
-            latList.put(activity.myRecord.get(i).latitude);
-            lngList.put(activity.myRecord.get(i).longitude);
+        for (int i = 0; i < activity.locationRecord.size(); i++) {
+            latList.put(activity.locationRecord.get(i).latitude);
+            lngList.put(activity.locationRecord.get(i).longitude);
         }
 
         JSONArray zipCodeList = new JSONArray();
-        for (int i = 0; i < activity.myRecord.size(); i++) {
+        for (int i = 0; i < activity.locationRecord.size(); i++) {
             Geocoder geocoder;
             List<Address> addresses;
             geocoder = new Geocoder(activity, Locale.getDefault());
@@ -270,9 +274,7 @@ class MarkerThread extends Thread {
     public void run() {
         try {
             post();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
     }
@@ -280,9 +282,9 @@ class MarkerThread extends Thread {
 
 
 class RecordTask extends TimerTask {
-    private BetaGo activity;
+    private BetaGoActivity activity;
 
-    RecordTask(BetaGo activity) {
+    RecordTask(BetaGoActivity activity) {
         this.activity = activity;
     }
 
@@ -292,16 +294,16 @@ class RecordTask extends TimerTask {
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
         final LatLng currentPos = new LatLng(latitude, longitude);
-        activity.myRecord.add(currentPos);
+        activity.locationRecord.add(currentPos);
         if (activity.recordPrevious != null) {
-            List<LatLng> polylist = new ArrayList<LatLng>();
+            List<LatLng> polylist = new ArrayList<>();
             polylist.add(activity.recordPrevious);
             polylist.add(currentPos);
             final List<LatLng> tmpPolylist = polylist;
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    activity.mMap.addPolyline(new PolylineOptions()
+                    activity.map.addPolyline(new PolylineOptions()
                             .addAll(tmpPolylist)
                             .width(12)
                             .color(Color.parseColor("#05b1fb"))
@@ -311,16 +313,16 @@ class RecordTask extends TimerTask {
             });
         }
         activity.recordPrevious = currentPos;
-        Log.d("RECORDING", String.valueOf(activity.myRecord));
+        Log.d("RECORDING", String.valueOf(activity.locationRecord));
     }
 }
 
 
 class FirstTask extends TimerTask {
 
-    private BetaGo activity;
+    private BetaGoActivity activity;
 
-    FirstTask(BetaGo activity) {
+    FirstTask(BetaGoActivity activity) {
         this.activity = activity;
     }
 
@@ -331,30 +333,30 @@ class FirstTask extends TimerTask {
     }
 };
 
-public class BetaGo extends FragmentActivity implements OnMapReadyCallback {
+public class BetaGoActivity extends FragmentActivity implements OnMapReadyCallback {
 
     public static final int ARRAY_SIZE = 10;
     public static final String EXTRA_MESSAGE = "com.zetaphase.betago.MESSAGE";
     public static final int MY_REQUEST_CODE = 12345;
     public static final int CAM_REQUEST = 7850;
-    public GoogleMap mMap;
-    public double[] latlist = new double[ARRAY_SIZE];
-    public double[] longlist = new double[ARRAY_SIZE];
-    public int pointer = 0;
-    public LocationManager lm;
-    public Marker marker;
-    public HashMap<String, Marker> markerMap = new HashMap<String, Marker>();
-    public List<LatLng> myRecord = new ArrayList<LatLng>();
-    public String recordName = "Untitled";
-    public LatLng recordPrevious = null;
-    public int snapNumber = 1;
-    public List<Double> markerLat = new ArrayList<Double>();
-    public List<Double> markerLng = new ArrayList<Double>();
-    public List<String> descriptions = new ArrayList<String>();
-    public String reloadName = "";
-    public String snapName;
-    public HashMap<String, String> imageMap = new HashMap<String, String>();
-    public Timer recordTimer;
+    private final String serverAddress = "192.168.1.65";
+    public GoogleMap map;
+    LocationManager lm;
+    List<LatLng> locationRecord = new ArrayList<>();
+    LatLng recordPrevious = null;
+    List<Double> markerLat = new ArrayList<>();
+    List<Double> markerLng = new ArrayList<>();
+    List<String> descriptions = new ArrayList<>();
+    Map<String, String> imageMap = new HashMap<>();
+    String recordName = "Untitled";
+    private double[] latlist = new double[ARRAY_SIZE];
+    private double[] longlist = new double[ARRAY_SIZE];
+    private int pointer = 0;
+    private Marker marker;
+    private HashMap<String, Marker> markerMap = new HashMap<>();
+    private int snapNumber = 1;
+    private String snapName;
+    private Timer recordTimer;
     private ListView mDrawerList;
     private ArrayAdapter<String> mAdapter;
 
@@ -379,7 +381,7 @@ public class BetaGo extends FragmentActivity implements OnMapReadyCallback {
             String mPhoneNumber = tMgr.getLine1Number();
             Log.d("MPHONENUMBER", mPhoneNumber);
             final HttpClient client = new DefaultHttpClient();
-            String urlString = "http://192.168.1.65/getDetail?id=" + intentResult + "&phoneNumber=" + mPhoneNumber;
+            String urlString = "http://" + serverAddress + "/getDetail?id=" + intentResult + "&phoneNumber=" + mPhoneNumber;
             Log.d("intentURL", urlString);
             final HttpGet httpGet = new HttpGet(urlString);
             final ResponseHandler<String> responseHandler = new BasicResponseHandler();
@@ -393,17 +395,17 @@ public class BetaGo extends FragmentActivity implements OnMapReadyCallback {
                         try {
                             final JSONObject jsonObj = new JSONObject(responseString[0]);
                             final JSONObject markerMap = jsonObj.getJSONObject("markerMap");
-                            List<LatLng> reloadPath = new ArrayList<LatLng>();
+                            List<LatLng> reloadPath = new ArrayList<>();
                             for (int i = 0; i < jsonObj.getJSONArray("lat").length(); i++) {
                                 reloadPath.add(new LatLng(jsonObj.getJSONArray("lat").getDouble(i), jsonObj.getJSONArray("lng").getDouble(i)));
                             }
                             final List<LatLng> tmpReloadPath = reloadPath;
                             Random rnd = new Random();
                             final int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-                            BetaGo.this.runOnUiThread(new Runnable() {
+                            BetaGoActivity.this.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mMap.addPolyline(new PolylineOptions()
+                                    map.addPolyline(new PolylineOptions()
                                             .addAll(tmpReloadPath)
                                             .width(12)
                                             .color(color)
@@ -423,10 +425,10 @@ public class BetaGo extends FragmentActivity implements OnMapReadyCallback {
                                 Log.d("MARKERIMAGE", markerMap.getString(key));
                                 imageMap.clear();
                                 imageMap.put(key + ".jpg", image);
-                                BetaGo.this.runOnUiThread(new Runnable() {
+                                BetaGoActivity.this.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        mMap.addMarker(new MarkerOptions().position(new LatLng(mlat, mlng)).title(key).snippet(description));
+                                        map.addMarker(new MarkerOptions().position(new LatLng(mlat, mlng)).title(key).snippet(description));
                                     }
                                 });
                             }
@@ -446,7 +448,7 @@ public class BetaGo extends FragmentActivity implements OnMapReadyCallback {
 
     private void addDrawerItems() {
         String[] osArray = {"Record", "Stop", "Snap", "Upload", "Reload"};
-        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
+        mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, osArray);
         mDrawerList.setAdapter(mAdapter);
     }
 
@@ -470,17 +472,16 @@ public class BetaGo extends FragmentActivity implements OnMapReadyCallback {
         if (!folder.exists()) {
             folder.mkdir();
         }
-        //File image_file = new File(folder, "snap.jpg");
-        File image_file = new File(folder, fileName);
-        return image_file;
+        File imageFile = new File(folder, fileName);
+        return imageFile;
     }
 
     @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        if (mMap != null) {
-            mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+        map = googleMap;
+        if (map != null) {
+            map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
 
                 @Override
                 public View getInfoWindow(Marker marker) {
@@ -505,8 +506,37 @@ public class BetaGo extends FragmentActivity implements OnMapReadyCallback {
 
             });
         }
-        mMap.setPadding(0, 2170, 0, 0);
-        mMap.setMyLocationEnabled(true);
+        map.setPadding(0, 2170, 0, 0);
+        // Request location permission
+        new Permissive.Request(android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                .whenPermissionsGranted(new PermissionsGrantedListener() {
+                    @Override
+                    public void onPermissionsGranted(String[] permissions) throws SecurityException {
+                        // location permission granted
+                        prepareMap();
+                    }
+                })
+                .whenPermissionsRefused(new PermissionsRefusedListener() {
+                    @Override
+                    public void onPermissionsRefused(String[] permissions) {
+                        // no location permission
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(BetaGoActivity.this);
+
+                        dialog.setTitle("Error")
+                                .setMessage("BetaGoActivity requires location permission to function. Please ensure that location is available to BetaGoActivity.")
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialoginterface, int i) {
+                                        // close activity
+                                        finish();
+                                    }
+                                }).show();
+                    }
+                })
+                .execute(this);
+    }
+
+    public void prepareMap() {
+        map.setMyLocationEnabled(true);
         this.lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Location location = this.lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         Log.d("LM", String.valueOf(location));
@@ -517,10 +547,10 @@ public class BetaGo extends FragmentActivity implements OnMapReadyCallback {
                     Log.d("DRAWERLISTCLICK", "drawer list clicked");
                     TextView textView = (TextView) viewClicked;
                     String value = textView.getText().toString();
-                    Toast.makeText(BetaGo.this, value, Toast.LENGTH_LONG).show();
+                    Toast.makeText(BetaGoActivity.this, value, Toast.LENGTH_LONG).show();
                     if (value == "Record") {
                         if (recordTimer == null) {
-                            final BetaGo finalActivity = BetaGo.this;
+                            final BetaGoActivity finalActivity = BetaGoActivity.this;
                             recordTimer = new Timer();
                             recordTimer.schedule(new RecordTask(finalActivity), 0, 5000);
                         }
@@ -532,17 +562,18 @@ public class BetaGo extends FragmentActivity implements OnMapReadyCallback {
                             recordTimer = null;
                         }
                     } else if (value == "Snap") {
+                        String pictureExtension = ".jpg";
                         Intent camera_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        File file = getFile("Snap" + snapNumber + ".jpg");
-                        snapName = "Snap" + snapNumber + ".jpg";
+                        File file = getFile("Snap" + snapNumber + pictureExtension);
+                        snapName = "Snap" + snapNumber + pictureExtension;
                         //camera_intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
                         if (camera_intent.resolveActivity(getPackageManager()) != null) {
                             startActivityForResult(camera_intent, CAM_REQUEST);
                         }
-                        AlertDialog.Builder builder = new AlertDialog.Builder(BetaGo.this);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(BetaGoActivity.this);
                         builder.setTitle("New Snap!");
 
-                        final EditText input = new EditText(BetaGo.this);
+                        final EditText input = new EditText(BetaGoActivity.this);
                         input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
                         builder.setView(input);
 
@@ -550,7 +581,7 @@ public class BetaGo extends FragmentActivity implements OnMapReadyCallback {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Location currentLoc = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                                Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(currentLoc.getLatitude(), currentLoc.getLongitude())).title("Snap" + String.valueOf(snapNumber)));
+                                Marker marker = map.addMarker(new MarkerOptions().position(new LatLng(currentLoc.getLatitude(), currentLoc.getLongitude())).title("Snap" + String.valueOf(snapNumber)));
                                 snapNumber += 1;
                                 marker.setSnippet(input.getText().toString());
                                 markerLat.add(currentLoc.getLatitude());
@@ -567,10 +598,10 @@ public class BetaGo extends FragmentActivity implements OnMapReadyCallback {
 
                         builder.show();
                     } else if (value == "Upload") {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(BetaGo.this);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(BetaGoActivity.this);
                         builder.setTitle("Save Record As:");
 
-                        final EditText input = new EditText(BetaGo.this);
+                        final EditText input = new EditText(BetaGoActivity.this);
                         input.setInputType(InputType.TYPE_CLASS_TEXT);
                         builder.setView(input);
 
@@ -579,7 +610,7 @@ public class BetaGo extends FragmentActivity implements OnMapReadyCallback {
                             public void onClick(DialogInterface dialog, int which) {
                                 Toast.makeText(getBaseContext(), "In progress..", Toast.LENGTH_LONG).show();
                                 recordName = input.getText().toString();
-                                MarkerThread thread = new MarkerThread(BetaGo.this);
+                                MarkerThread thread = new MarkerThread(BetaGoActivity.this);
                                 thread.start();
                             }
                         });
@@ -593,7 +624,7 @@ public class BetaGo extends FragmentActivity implements OnMapReadyCallback {
                         builder.show();
                     } else if (value == "Reload") {
                         Log.d("CLICKEDRELOAD", "clicked reload");
-                        ReloadThread thread = new ReloadThread(BetaGo.this);
+                        ReloadThread thread = new ReloadThread(BetaGoActivity.this);
                         thread.start();
                     }
                 }
@@ -602,8 +633,7 @@ public class BetaGo extends FragmentActivity implements OnMapReadyCallback {
             final double longitude = location.getLongitude();
             final double latitude = location.getLatitude();
             LatLng loc = new LatLng(latitude, longitude);
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
+            map.moveCamera(CameraUpdateFactory.newLatLng(loc));
         }
     }
-
 }

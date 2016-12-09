@@ -36,7 +36,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".BetaGo"
+            android:name=".BetaGoActivity"
             android:label="@string/title_activity_beta_go">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

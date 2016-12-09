@@ -14,7 +14,7 @@ import android.widget.Toast;
 public class ReloadListActivity extends AppCompatActivity {
 
     public String message;
-    public BetaGo activity;
+    public BetaGoActivity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +23,7 @@ public class ReloadListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_reload_list);
 
         Intent intent = getIntent();
-        message = intent.getStringExtra(BetaGo.EXTRA_MESSAGE);
+        message = intent.getStringExtra(BetaGoActivity.EXTRA_MESSAGE);
         //TextView textView = new TextView(this);
         //textView.setTextSize(10);
         //textView.setText(message);
@@ -63,7 +63,7 @@ public class ReloadListActivity extends AppCompatActivity {
                 Log.d("SETRESULT", "beforeresult");
                 Intent intent = new Intent();
                 intent.putExtra("Mydata", textView.getText().toString());
-                setResult(BetaGo.MY_REQUEST_CODE, intent);
+                setResult(BetaGoActivity.MY_REQUEST_CODE, intent);
                 Log.d("SETRESULT", "setresult");
                 finish();
             }
