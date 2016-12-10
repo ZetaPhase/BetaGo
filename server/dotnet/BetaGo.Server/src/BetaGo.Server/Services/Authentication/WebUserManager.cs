@@ -1,5 +1,6 @@
 ﻿using BetaGo.Server.DataModels.Registration;
 using BetaGo.Server.Services.Database;
+using BetaGo.Server.Utilities;
 using System;
 using System.Security;
 
@@ -63,6 +64,7 @@ namespace BetaGo.Server.Services.Authentication
                     Identifier = Guid.NewGuid(),
                     Username = regRequest.Username,
                     PhoneNumber = regRequest.PhoneNumber,
+                    ApiKey = StringUtils.SecureRandomString(24),
                     CryptoSalt = pwSalt,
                     PasswordCryptoConf = cryptoConf,
                     PasswordKey = encryptedPassword,
