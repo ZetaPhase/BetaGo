@@ -57,7 +57,7 @@ Check out my blog for some tutorials on Google Maps V2 Android
 
 ## License and Copyrights
 
-&copy; 2016 Xeliot. All Rights Reserved. - (Creator of Project)
+&copy; 2016 Xeliot. All Rights Reserved. - (Creator of Project)  
 &copy; 2016 0xFireball. All Rights Reserved. - (Collaborator from IridiumIon Software)
 
 Licensed under the AGPLv3.
