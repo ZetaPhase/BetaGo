@@ -1,5 +1,6 @@
 ﻿using BetaGo.Server.DataModels.Registration;
 using BetaGo.Server.Services.Authentication;
+using BetaGo.Server.Utilities;
 using Nancy;
 using Nancy.ModelBinding;
 using System;
@@ -29,8 +30,21 @@ namespace BetaGo.Server.Modules
                     }
                     // Validate phone number
 
+                    // Validate password
+                    if (req.Password.Length < 8)
+                    {
+                        throw new SecurityException("Password must be at least 8 characters.");
+                    }
+
                     // Validate registration
-                    WebUserManager.RegisterUser(req);
+                    var newU = WebUserManager.RegisterUser(req);
+
+                    // Return just the 200 for now
+                    return Response.AsJsonNet(new RegistrationResponse
+                    {
+                        Username = newU.Username,
+                        ApiKey = newU.ApiKey,
+                    });
                 }
                 catch (NullReferenceException)
                 {
@@ -43,9 +57,6 @@ namespace BetaGo.Server.Modules
                     return Response.AsText(secEx.Message)
                         .WithStatusCode(HttpStatusCode.Unauthorized);
                 }
-
-                // Return just the 200 for now
-                return new Response();
             });
         }
     }
