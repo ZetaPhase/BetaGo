@@ -36,9 +36,20 @@ body in JSON format. In a `GET` request, parameters should be in the query strin
 Most user-related actions require authentication. If there is an asterisk (`*`) after
 the route path, then you will need to add a parameter `apiKey` set to the user's API key.
 
+All requests accept JSON, while most also accept XML.
+
+See the **API Registration Tips** section for information about how to get the user API key.
+
 ### API Routes
 
-`/register` (POST)
+#### Account Registration
 
+`/register` (POST) - Registers a new user account. The server
+performs a number of checks and validations to ensure that account data is valid.
+
+Parameters:
+`username`
+
+#### API Registration Tips
 
 Copyright &copy; 2016 0xFireball
