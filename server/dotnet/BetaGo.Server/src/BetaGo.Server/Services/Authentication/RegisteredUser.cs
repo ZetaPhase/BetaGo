@@ -1,4 +1,5 @@
 ﻿using LiteDB;
+using Newtonsoft.Json;
 using System;
 
 namespace BetaGo.Server.Services.Authentication
@@ -12,14 +13,22 @@ namespace BetaGo.Server.Services.Authentication
 
         public string PhoneNumber { get; set; }
 
+        [JsonIgnore]
+        public string ApiKey { get; set; }
+
+        [JsonIgnore]
         public byte[] PasswordKey { get; set; }
 
+        [JsonIgnore]
         public byte[] CryptoSalt { get; set; }
 
+        [JsonIgnore]
         public PasswordCryptoConfiguration PasswordCryptoConf { get; set; }
 
+        [JsonIgnore]
         public Guid Identifier { get; set; }
 
+        [JsonIgnore]
         [BsonId]
         public ObjectId DatabaseIdentifier { get; set; }
     }
