@@ -9,9 +9,9 @@ namespace BetaGo.Server.Services.Authentication
     /// <summary>
     /// A user manager service. Provides access to common operations with users, and abstracts the database
     /// </summary>
-    public class WebUserManager
+    public static class WebUserManager
     {
-        public RegisteredUser FindUserByUsername(string username)
+        public static RegisteredUser FindUserByUsername(string username)
         {
             RegisteredUser storedUserRecord = null;
             var db = new DatabaseAccessService().OpenOrCreateDefault();
@@ -26,7 +26,22 @@ namespace BetaGo.Server.Services.Authentication
             return storedUserRecord;
         }
 
-        public bool UpdateUserInDatabase(RegisteredUser currentUser)
+        public static RegisteredUser FindUserByApiKey(string apiKey)
+        {
+            RegisteredUser storedUserRecord = null;
+            var db = new DatabaseAccessService().OpenOrCreateDefault();
+            var registeredUsers = db.GetCollection<RegisteredUser>(DatabaseAccessService.UsersCollectionDatabaseKey);
+            var userRecord = registeredUsers.FindOne(u => u.ApiKey == apiKey);
+            storedUserRecord = userRecord;
+
+            if (storedUserRecord == null)
+            {
+                return null;
+            }
+            return storedUserRecord;
+        }
+
+        public static bool UpdateUserInDatabase(RegisteredUser currentUser)
         {
             bool result;
             var db = new DatabaseAccessService().OpenOrCreateDefault();
@@ -42,7 +57,7 @@ namespace BetaGo.Server.Services.Authentication
         /// <summary>
         /// Attempts to register a new user. Only the username is validated, it is expected that other fields have already been validated!
         /// </summary>
-        public RegisteredUser RegisterUser(RegistrationRequest regRequest)
+        public static RegisteredUser RegisterUser(RegistrationRequest regRequest)
         {
             RegisteredUser newUserRecord = null;
             if (FindUserByUsername(regRequest.Username) != null)
@@ -74,6 +89,8 @@ namespace BetaGo.Server.Services.Authentication
 
                 // Index database
                 registeredUsers.EnsureIndex(x => x.Identifier);
+                registeredUsers.EnsureIndex(x => x.ApiKey);
+                registeredUsers.EnsureIndex(x => x.Username);
 
                 trans.Commit();
             }
