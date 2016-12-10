@@ -12,12 +12,11 @@ namespace BetaGo.Server.Services.Authentication
         public RegisteredUser FindUserByUsername(string username)
         {
             RegisteredUser storedUserRecord = null;
-            using (var db = new DatabaseAccessService().OpenOrCreateDefault())
-            {
-                var registeredUsers = db.GetCollection<RegisteredUser>(DatabaseAccessService.UsersCollectionDatabaseKey);
-                var userRecord = registeredUsers.FindOne(u => u.Username == username);
-                storedUserRecord = userRecord;
-            }
+            var db = new DatabaseAccessService().OpenOrCreateDefault();
+            var registeredUsers = db.GetCollection<RegisteredUser>(DatabaseAccessService.UsersCollectionDatabaseKey);
+            var userRecord = registeredUsers.FindOne(u => u.Username == username);
+            storedUserRecord = userRecord;
+
             if (storedUserRecord == null)
             {
                 return null;
@@ -28,10 +27,12 @@ namespace BetaGo.Server.Services.Authentication
         public bool UpdateUserInDatabase(RegisteredUser currentUser)
         {
             bool result;
-            using (var db = new DatabaseAccessService().OpenOrCreateDefault())
+            var db = new DatabaseAccessService().OpenOrCreateDefault();
+            var registeredUsers = db.GetCollection<RegisteredUser>(DatabaseAccessService.UsersCollectionDatabaseKey);
+            using (var trans = db.BeginTrans())
             {
-                var registeredUsers = db.GetCollection<RegisteredUser>(DatabaseAccessService.UsersCollectionDatabaseKey);
                 result = registeredUsers.Update(currentUser);
+                trans.Commit();
             }
             return result;
         }
@@ -47,9 +48,10 @@ namespace BetaGo.Server.Services.Authentication
                 //BAD! Another conflicting user exists!
                 throw new SecurityException("A user with the same username already exists!");
             }
-            using (var db = new DatabaseAccessService().OpenOrCreateDefault())
+            var db = new DatabaseAccessService().OpenOrCreateDefault();
+            var registeredUsers = db.GetCollection<RegisteredUser>(DatabaseAccessService.UsersCollectionDatabaseKey);
+            using (var trans = db.BeginTrans())
             {
-                var registeredUsers = db.GetCollection<RegisteredUser>(DatabaseAccessService.UsersCollectionDatabaseKey);
                 // TODO: Maybe calculate cryptographic info
                 // Create user
                 newUserRecord = new RegisteredUser
@@ -62,6 +64,8 @@ namespace BetaGo.Server.Services.Authentication
 
                 // Index database
                 registeredUsers.EnsureIndex(x => x.Identifier);
+
+                trans.Commit();
             }
             return newUserRecord;
         }
