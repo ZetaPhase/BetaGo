@@ -9,8 +9,10 @@ namespace BetaGo.Server.Services.Authentication
     /// </summary>
     public class RegisteredUser
     {
+        [JsonProperty("username")]
         public string Username { get; set; }
 
+        [JsonProperty("phoneNumber")]
         public string PhoneNumber { get; set; }
 
         [JsonIgnore]

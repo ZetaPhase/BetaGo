@@ -1,8 +1,14 @@
-﻿namespace BetaGo.Server.DataModels.Registration
+﻿using BetaGo.Server.Services.Authentication;
+using Newtonsoft.Json;
+
+namespace BetaGo.Server.DataModels.Registration
 {
     public class RegistrationResponse
     {
-        public string Username { get; set; }
+        [JsonProperty("user")]
+        public RegisteredUser User { get; set; }
+
+        [JsonProperty("apikey")]
         public string ApiKey { get; set; }
     }
 }

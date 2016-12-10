@@ -42,7 +42,7 @@ namespace BetaGo.Server.Modules
                     // Return just the 200 for now
                     return Response.AsJsonNet(new RegistrationResponse
                     {
-                        Username = newU.Username,
+                        User = newU,
                         ApiKey = newU.ApiKey,
                     });
                 }
