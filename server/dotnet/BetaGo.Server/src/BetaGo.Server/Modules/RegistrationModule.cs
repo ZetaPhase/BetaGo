@@ -29,9 +29,8 @@ namespace BetaGo.Server.Modules
                     }
                     // Validate phone number
 
-                    var userManagerConn = new WebUserManager();
                     // Validate registration
-                    userManagerConn.RegisterUser(req);
+                    WebUserManager.RegisterUser(req);
                 }
                 catch (NullReferenceException)
                 {
