@@ -36,6 +36,11 @@ namespace BetaGo.Server.Modules
                         throw new SecurityException("Password must be at least 8 characters.");
                     }
 
+                    if (!StringUtils.IsPhoneNumber(req.PhoneNumber))
+                    {
+                        throw new SecurityException("Phone number was of invalid format.");
+                    }
+
                     // Validate registration
                     var newU = WebUserManager.RegisterUser(req);
 

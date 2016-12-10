@@ -1,5 +1,6 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace BetaGo.Server.Utilities
 {
@@ -23,6 +24,12 @@ namespace BetaGo.Server.Utilities
                 result.Append(chars[b % (chars.Length)]);
             }
             return result.ToString();
+        }
+
+        //http://stackoverflow.com/a/29970789
+        public static bool IsPhoneNumber(string number)
+        {
+            return Regex.Match(number, @"^(\+[0-9]{9})$").Success;
         }
     }
 }
