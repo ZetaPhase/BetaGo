@@ -29,13 +29,15 @@ APIs utilized
 
 Servers are located in `Server/` in the repository.
 
-Right now, there are 2 server implementations in place.
+Right now, there are 3 server implementations in place.
 
+- A prototype Python base http server, using flat file storage (logic completed) inefficient
 - A Python server built with Flask, using SQLite as a backend
 - An ASP.NET Core server that uses LiteDB (MongoDB-like database) as a backend
 
 For now, we're still using the Python server, but plan to eventually
-replace it with the ASP.NET Core server for scalability and performance.
+replace it with flask server and sqlite for convenience and simplicity
+or use ASP.NET Core server for scalability and performance.
 
 ## Quick Start For Developers
 
@@ -55,7 +57,7 @@ Check out my blog for some tutorials on Google Maps V2 Android
 
 ## License and Copyrights
 
-&copy; 2016 Xeliot. All Rights Reserved.  
+&copy; 2016 Xeliot. All Rights Reserved. - (Creator of Project)
 &copy; 2016 0xFireball. All Rights Reserved. - (Collaborator from IridiumIon Software)
 
 Licensed under the AGPLv3.
