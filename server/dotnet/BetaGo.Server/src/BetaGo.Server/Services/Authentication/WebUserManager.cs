@@ -1,5 +1,6 @@
 ﻿using BetaGo.Server.DataModels.Registration;
 using BetaGo.Server.Services.Database;
+using System;
 using System.Security;
 
 namespace BetaGo.Server.Services.Authentication
@@ -52,12 +53,19 @@ namespace BetaGo.Server.Services.Authentication
             var registeredUsers = db.GetCollection<RegisteredUser>(DatabaseAccessService.UsersCollectionDatabaseKey);
             using (var trans = db.BeginTrans())
             {
-                // TODO: Maybe calculate cryptographic info
+                //Calculate cryptographic info
+                var cryptoConf = PasswordCryptoConfiguration.CreateDefault();
+                var pwSalt = AuthCryptoHelper.GetRandomSalt(64);
+                var encryptedPassword = AuthCryptoHelper.CalculateUserPasswordHash(regRequest.Password, pwSalt, cryptoConf);
                 // Create user
                 newUserRecord = new RegisteredUser
                 {
+                    Identifier = Guid.NewGuid(),
                     Username = regRequest.Username,
-                    PhoneNumber = regRequest.PhoneNumber
+                    PhoneNumber = regRequest.PhoneNumber,
+                    CryptoSalt = pwSalt,
+                    PasswordCryptoConf = cryptoConf,
+                    PasswordKey = encryptedPassword,
                 };
                 // Add the user to the database
                 registeredUsers.Insert(newUserRecord);
