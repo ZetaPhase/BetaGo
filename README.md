@@ -1,7 +1,11 @@
 
 # BetaGo
 
-An open source tourism app using augmented reality (currently Android only!)
+An open source virtual tourism app using augmented reality (currently Android only!)
+
+# About
+
+- Somewhat inspired by Pokemon Go by Niantic Inc
 
 ## Architecture
 
@@ -9,7 +13,6 @@ APIs utilized
 
 - Google Maps Android API
 - Google Maps Directions API
-- Inspired by Pokemon Go by Niantic Inc
 - android tutorials coming soon
   - intents
   - camera
@@ -18,16 +21,21 @@ APIs utilized
 
 ### Part 1: The App
 
-- Simplistic minimalistic map from google
+App implementations are in `app/`
+
+#### Current Features
+
+- Simple map from Google APIs
 - Record
 - Stop
 - Snap
 - Download
 - Upload
+- Sync activity with server
 
 ### Part 2: The server
 
-Servers are located in `Server/` in the repository.
+Servers are located in `server/` in the repository.
 
 Right now, there are 3 server implementations in place.
 
