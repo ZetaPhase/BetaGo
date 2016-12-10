@@ -48,8 +48,35 @@ See the **API Registration Tips** section for information about how to get the u
 performs a number of checks and validations to ensure that account data is valid.
 
 Parameters:
-`username`
 
-#### API Registration Tips
+`username` - The username of the new user. Must be at least 4 characters.
+
+`password` - The new user's password. This will later be hashed securely on the server
+
+`phoneNumber` (optional) - The new user's phone number. If specified, must be of valid format.
+
+Response type:
+
+Assuming a valid request, the server will send a JSON response containing
+information about the newly registered user.
+
+Example response:
+
+```json
+{
+  "user": {
+    "username": "SomeBody",
+    "phoneNumber": "18004567890"
+  },
+  "apikey": "W2ThJ7xqtB3znyj7g0KF4jU2HJbcqdg1Un8eLXAV"
+}
+```
+
+##### API Registration Tips
+
+After registering an account through the API, be sure to save the user's `apikey`.
+This will act as a fully privileged access token to the user's account. 
+
+
 
 Copyright &copy; 2016 0xFireball
