@@ -26,7 +26,7 @@ namespace BetaGo.Server.Services.Authentication
         public PasswordCryptoConfiguration PasswordCryptoConf { get; set; }
 
         [JsonIgnore]
-        public Guid Identifier { get; set; }
+        public string Identifier { get; set; }
 
         [JsonIgnore]
         [BsonId]

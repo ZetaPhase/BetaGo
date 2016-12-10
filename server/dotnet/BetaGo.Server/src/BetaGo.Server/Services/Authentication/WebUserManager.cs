@@ -76,7 +76,7 @@ namespace BetaGo.Server.Services.Authentication
                 // Create user
                 newUserRecord = new RegisteredUser
                 {
-                    Identifier = Guid.NewGuid(),
+                    Identifier = Guid.NewGuid().ToString(),
                     Username = regRequest.Username,
                     PhoneNumber = regRequest.PhoneNumber,
                     ApiKey = StringUtils.SecureRandomString(40),
