@@ -5,6 +5,8 @@ namespace BetaGo.Server.Services.Authentication
 {
     public class ApiClientAuthenticationService
     {
+        public static Claim StatelessAuthClaim { get; } = new Claim("authType", "stateless");
+
         public static ClaimsPrincipal ResolveClientIdentity(string apiKey)
         {
             // Check user records in database
@@ -12,7 +14,9 @@ namespace BetaGo.Server.Services.Authentication
             if (u != null)
             {
                 // Give client identity
-                return new ClaimsPrincipal(new GenericIdentity(u.Username, "stateless"));
+                var id = new ClaimsPrincipal(new ClaimsIdentity(new GenericIdentity(u.Username, "stateless"), new Claim[] {
+                }));
+                return id;
             }
             return null;
         }

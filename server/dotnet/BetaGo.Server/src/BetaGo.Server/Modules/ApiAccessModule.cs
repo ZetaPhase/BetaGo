@@ -1,4 +1,5 @@
-﻿using Nancy;
+﻿using BetaGo.Server.Services.Authentication;
+using Nancy;
 using Nancy.Security;
 
 namespace BetaGo.Server.Modules
@@ -8,8 +9,7 @@ namespace BetaGo.Server.Modules
         public ApiAccessModule()
         {
             this.RequiresAuthentication();
-
-
+            this.RequiresClaims(x => x.Value == ApiClientAuthenticationService.StatelessAuthClaim.Value);
         }
     }
 }
