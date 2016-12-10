@@ -9,7 +9,7 @@ namespace BetaGo.Server.Utilities
         public static string SecureRandomString(int maxSize)
         {
             char[] chars = new char[62];
-            chars = 
+            chars =
             "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".ToCharArray();
             byte[] data = new byte[1];
             using (RandomNumberGenerator prng = RandomNumberGenerator.Create())
@@ -29,6 +29,7 @@ namespace BetaGo.Server.Utilities
         //http://stackoverflow.com/a/29970789
         public static bool IsPhoneNumber(string number)
         {
+            if (string.IsNullOrEmpty(number)) return false;
             return Regex.Match(number, @"^(\+[0-9]{9})$").Success;
         }
     }
