@@ -26,12 +26,14 @@ App implementations are in `app/`.
 **BetaGo** client (Android, Java) - written by `xeliot` - 
 This client is the main mobile app for BetaGo. It does
 not yet support the new `BetaGo.Server` API; it currently only
-works with the Flask server
+works with the Flask server.
 
 **BetaGoSnow** client (Android, Kotlin) - written by `0xFireball` -
 This is a secondary client for BetaGo. It is developed to test
 the very latest unstable changes and features in `BetaGo.Server`.
-This client only supports the new API.
+This client only supports the new API. This client does not yet
+support all the BetaGo features that the **BetaGo** app supports.
+Until this support is finished, this app can be found **[here](https://github.com/0xFireball/BetaGo-Snow/tree/master/app/android/BetaGoSnow)**.
 
 #### Current Features
 
