@@ -4,6 +4,7 @@ using BetaGo.Server.Utilities;
 using System;
 using System.Collections;
 using System.Security;
+using System.Threading.Tasks;
 
 namespace BetaGo.Server.Services.Authentication
 {
@@ -58,7 +59,12 @@ namespace BetaGo.Server.Services.Authentication
         /// <summary>
         /// Attempts to register a new user. Only the username is validated, it is expected that other fields have already been validated!
         /// </summary>
-        public static RegisteredUser RegisterUser(RegistrationRequest regRequest)
+        public static async Task<RegisteredUser> RegisterUserAsync(RegistrationRequest regRequest)
+        {
+            return await Task.Run(() => RegisterUser(regRequest));
+        }
+
+        private static RegisteredUser RegisterUser(RegistrationRequest regRequest)
         {
             RegisteredUser newUserRecord = null;
             if (FindUserByUsername(regRequest.Username) != null)
@@ -98,7 +104,12 @@ namespace BetaGo.Server.Services.Authentication
             return newUserRecord;
         }
 
-        public static bool CheckPassword(string password, RegisteredUser userRecord)
+        public static async Task<bool> CheckPasswordAsync(string password, RegisteredUser userRecord)
+        {
+            return await Task.Run(() => CheckPassword(password, userRecord));
+        }
+
+        private static bool CheckPassword(string password, RegisteredUser userRecord)
         {
             //Calculate hash and compare
             var pwKey = AuthCryptoHelper.CalculateUserPasswordHash(password, userRecord.CryptoSalt, userRecord.PasswordCryptoConf);

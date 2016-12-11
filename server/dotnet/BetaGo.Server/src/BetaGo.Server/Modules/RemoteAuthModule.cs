@@ -15,7 +15,7 @@ namespace BetaGo.Server.Modules
     {
         public RemoteAuthModule()
         {
-            Post("/register", args =>
+            Post("/register", async args =>
             {
                 var req = this.Bind<RegistrationRequest>();
 
@@ -42,7 +42,7 @@ namespace BetaGo.Server.Modules
                     }
 
                     // Validate registration
-                    var newUser = WebUserManager.RegisterUser(req);
+                    var newUser = await WebUserManager.RegisterUserAsync(req);
 
                     // Return user details
                     return Response.AsJsonNet(new RemoteAuthResponse
@@ -64,7 +64,7 @@ namespace BetaGo.Server.Modules
                 }
             });
 
-            Post("/login", args =>
+            Post("/login", async args =>
             {
                 var req = this.Bind<LoginRequest>();
 
@@ -73,7 +73,7 @@ namespace BetaGo.Server.Modules
                 try
                 {
                     // Validate password
-                    if (WebUserManager.CheckPassword(req.Password, selectedUser))
+                    if (await WebUserManager.CheckPasswordAsync(req.Password, selectedUser))
                     {
                         // Return user details
                         return Response.AsJsonNet(new RemoteAuthResponse
