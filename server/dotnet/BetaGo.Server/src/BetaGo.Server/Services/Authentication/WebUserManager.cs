@@ -70,7 +70,7 @@ namespace BetaGo.Server.Services.Authentication
         private static RegisteredUser RegisterUser(RegistrationRequest regRequest)
         {
             RegisteredUser newUserRecord = null;
-            if (FindUserByUsernameAsync(regRequest.Username) != null)
+            if (FindUserByUsernameAsync(regRequest.Username).GetAwaiter().GetResult() != null)
             {
                 //BAD! Another conflicting user exists!
                 throw new SecurityException("A user with the same username already exists!");
