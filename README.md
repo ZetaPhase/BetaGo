@@ -23,8 +23,15 @@ APIs utilized
 
 App implementations are in `app/`.
 
-**BetaGo** client (Android, Java) - written by `xeliot`
+**BetaGo** client (Android, Java) - written by `xeliot` - 
+This client is the main mobile app for BetaGo. It does
+not yet support the new `BetaGo.Server` API; it currently only
+works with the Flask server
 
+**BetaGoSnow** client (Android, Kotlin) - written by `0xFireball` -
+This is a secondary client for BetaGo. It is developed to test
+the very latest unstable changes and features in `BetaGo.Server`.
+This client only supports the new API.
 
 #### Current Features
 
@@ -49,6 +56,8 @@ Right now, there are 3 server implementations in place.
 For now, we're still using the Python server, but plan to eventually
 replace it with flask server and sqlite for convenience and simplicity
 or use ASP.NET Core server for scalability and performance.
+
+The server API documentation is in `/docs/devnotes/dotnet-server-api.md`
 
 ## Quick Start For Developers
 
