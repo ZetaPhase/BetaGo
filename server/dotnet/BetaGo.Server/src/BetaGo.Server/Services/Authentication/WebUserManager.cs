@@ -1,4 +1,4 @@
-﻿using BetaGo.Server.DataModels.Registration;
+﻿using BetaGo.Server.DataModels.Auth;
 using BetaGo.Server.Services.Database;
 using BetaGo.Server.Utilities;
 using System;

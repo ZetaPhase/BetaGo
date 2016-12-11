@@ -1,7 +1,7 @@
 ﻿using BetaGo.Server.Services.Authentication;
 using Newtonsoft.Json;
 
-namespace BetaGo.Server.DataModels.Registration
+namespace BetaGo.Server.DataModels.Auth
 {
     public class RemoteAuthResponse
     {

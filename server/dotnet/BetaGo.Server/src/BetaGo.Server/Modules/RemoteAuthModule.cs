@@ -1,4 +1,4 @@
-﻿using BetaGo.Server.DataModels.Registration;
+﻿using BetaGo.Server.DataModels.Auth;
 using BetaGo.Server.Services.Authentication;
 using BetaGo.Server.Utilities;
 using Nancy;
@@ -42,13 +42,13 @@ namespace BetaGo.Server.Modules
                     }
 
                     // Validate registration
-                    var newU = WebUserManager.RegisterUser(req);
+                    var newUser = WebUserManager.RegisterUser(req);
 
-                    // Return just the 200 for now
+                    // Return user details
                     return Response.AsJsonNet(new RemoteAuthResponse
                     {
-                        User = newU,
-                        ApiKey = newU.ApiKey,
+                        User = newUser,
+                        ApiKey = newUser.ApiKey,
                     });
                 }
                 catch (NullReferenceException)
@@ -66,7 +66,19 @@ namespace BetaGo.Server.Modules
 
             Post("/login", args =>
             {
-                
+                var req = this.Bind<LoginRequest>();
+
+                var selectedUser = WebUserManager.FindUserByUsername(req.Username);
+
+                //TODO
+                throw new SecurityException();
+
+                // Return user details
+                return Response.AsJsonNet(new RemoteAuthResponse
+                {
+                    User = selectedUser,
+                    ApiKey = selectedUser.ApiKey,
+                });
             });
         }
     }

@@ -1,4 +1,4 @@
-﻿namespace BetaGo.Server.DataModels.Registration
+﻿namespace BetaGo.Server.DataModels.Auth
 {
     public class RegistrationRequest
     {
