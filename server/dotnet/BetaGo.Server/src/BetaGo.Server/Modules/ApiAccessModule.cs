@@ -12,9 +12,9 @@ namespace BetaGo.Server.Modules
             this.RequiresAuthentication();
             this.RequiresClaims(x => x.Value == ApiClientAuthenticationService.StatelessAuthClaim.Value);
 
-            Get("/userinfo", _ =>
+            Get("/userinfo", async _ =>
             {
-                var user = WebUserManager.FindUserByUsername(Context.CurrentUser.Identity.Name);
+                var user = await WebUserManager.FindUserByUsernameAsync(Context.CurrentUser.Identity.Name);
                 return Response.AsJsonNet(user);
             });
         }

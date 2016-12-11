@@ -1,4 +1,4 @@
-﻿using BetaGo.Server.DataModels.Registration;
+﻿using BetaGo.Server.DataModels.Auth;
 using BetaGo.Server.Services.Authentication;
 using BetaGo.Server.Utilities;
 using Nancy;
@@ -15,13 +15,13 @@ namespace BetaGo.Server.Modules
     {
         public RemoteAuthModule()
         {
-            Post("/register", args =>
+            Post("/register", async args =>
             {
                 var req = this.Bind<RegistrationRequest>();
 
                 try
                 {
-                    // TODO: Validate parameters!
+                    // Validate parameters!
 
                     // Valdiate username length, charset
                     if (req.Username.Length < 4)
@@ -42,14 +42,50 @@ namespace BetaGo.Server.Modules
                     }
 
                     // Validate registration
-                    var newU = WebUserManager.RegisterUser(req);
+                    var newUser = await WebUserManager.RegisterUserAsync(req);
 
-                    // Return just the 200 for now
-                    return Response.AsJsonNet(new RegistrationResponse
+                    // Return user details
+                    return Response.AsJsonNet(new RemoteAuthResponse
                     {
-                        User = newU,
-                        ApiKey = newU.ApiKey,
+                        User = newUser,
+                        ApiKey = newUser.ApiKey,
                     });
+                }
+                catch (NullReferenceException)
+                {
+                    // A parameter was not provided
+                    return new Response().WithStatusCode(HttpStatusCode.BadRequest);
+                }
+                catch (SecurityException secEx)
+                {
+                    // Registration blocked for security reasons
+                    return Response.AsText(secEx.Message)
+                        .WithStatusCode(HttpStatusCode.Unauthorized);
+                }
+            });
+
+            Post("/login", async args =>
+            {
+                var req = this.Bind<LoginRequest>();
+
+                var selectedUser = await WebUserManager.FindUserByUsernameAsync(req.Username);
+
+                try
+                {
+                    // Validate password
+                    if (await WebUserManager.CheckPasswordAsync(req.Password, selectedUser))
+                    {
+                        // Return user details
+                        return Response.AsJsonNet(new RemoteAuthResponse
+                        {
+                            User = selectedUser,
+                            ApiKey = selectedUser.ApiKey,
+                        });
+                    }
+                    else
+                    {
+                        return new Response().WithStatusCode(HttpStatusCode.Unauthorized);
+                    }
                 }
                 catch (NullReferenceException)
                 {

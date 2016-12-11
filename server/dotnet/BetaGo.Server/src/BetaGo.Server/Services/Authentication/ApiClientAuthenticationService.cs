@@ -11,7 +11,7 @@ namespace BetaGo.Server.Services.Authentication
         public static ClaimsPrincipal ResolveClientIdentity(string apiKey)
         {
             // Check user records in database
-            var u = WebUserManager.FindUserByApiKey(apiKey);
+            var u = WebUserManager.FindUserByApiKeyAsync(apiKey);
             if (u != null)
             {
                 // Give client identity
