@@ -3,7 +3,7 @@
 
 By 0xFireball (Nihal Talur)
 
-Specification version `v0.1.0`.
+Specification version `v0.1.0.1`.
 This version ID will be updated as the specification changes.
 API clients will be required to adapt to API changes, and backwards
 compatibility is not guaranteed.
@@ -79,7 +79,8 @@ Example response:
 
 #### Account details querying
 
-`/api/userinfo`* (GET) - Retrieves user info in JSON format.
+`/api/userinfo`* (GET) - Retrieves user info in JSON format. The client
+MUST be authenticated using a Statless auth token (the API key for example)
 
 Response type:
 
@@ -106,4 +107,4 @@ When performing subsequent actions in the application, this API Key can be
 supplied to API routes that require authentication to authenticate on behalf
 of the user.
 
-Copyright &copy; 2016 0xFireball
+Copyright &copy; 2016 [0xFireball](https://github.com/0xFireball). All Rights Reserved.
