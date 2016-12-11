@@ -21,7 +21,7 @@ APIs utilized
 
 ### Part 1: The App
 
-App implementations are in `app/`
+App implementations are in `app/` - written by xeliot
 
 #### Current Features
 
@@ -39,9 +39,9 @@ Servers are located in `server/` in the repository.
 
 Right now, there are 3 server implementations in place.
 
-- A prototype Python base http server, using flat file storage (logic completed) inefficient
-- A Python server built with Flask, using SQLite as a backend
-- An ASP.NET Core server that uses LiteDB (MongoDB-like database) as a backend
+- A prototype Python base http server, using flat file storage (logic completed) inefficient - written by xeliot
+- A Python server built with Flask, using SQLite as a backend - written by xeliot
+- An ASP.NET Core server that uses LiteDB (MongoDB-like database) as a backend - written by 0xFireball
 
 For now, we're still using the Python server, but plan to eventually
 replace it with flask server and sqlite for convenience and simplicity
