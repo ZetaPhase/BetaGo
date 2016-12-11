@@ -3,6 +3,11 @@
 
 By 0xFireball (Nihal Talur)
 
+Specification version `v0.1.0`.
+This version ID will be updated as the specification changes.
+API clients will be required to adapt to API changes, and backwards
+compatibility is not guaranteed.
+
 ## `BetaGo.Server` Intro
 
 Some quick notes:
