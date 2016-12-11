@@ -21,7 +21,10 @@ APIs utilized
 
 ### Part 1: The App
 
-App implementations are in `app/` - written by `xeliot`
+App implementations are in `app/`.
+
+**BetaGo** client (Android, Java) - written by `xeliot`
+
 
 #### Current Features
 
