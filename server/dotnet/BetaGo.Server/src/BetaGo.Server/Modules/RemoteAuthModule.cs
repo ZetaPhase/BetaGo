@@ -11,9 +11,9 @@ namespace BetaGo.Server.Modules
     /// <summary>
     /// Registration functionality
     /// </summary>
-    public class RegistrationModule : NancyModule
+    public class RemoteAuthModule : NancyModule
     {
-        public RegistrationModule()
+        public RemoteAuthModule()
         {
             Post("/register", args =>
             {
