@@ -2,6 +2,7 @@
 using BetaGo.Server.Services.Database;
 using BetaGo.Server.Utilities;
 using System;
+using System.Collections;
 using System.Security;
 
 namespace BetaGo.Server.Services.Authentication
@@ -95,6 +96,13 @@ namespace BetaGo.Server.Services.Authentication
                 trans.Commit();
             }
             return newUserRecord;
+        }
+
+        public static bool CheckPassword(string password, RegisteredUser userRecord)
+        {
+            //Calculate hash and compare
+            var pwKey = AuthCryptoHelper.CalculateUserPasswordHash(password, userRecord.CryptoSalt, userRecord.PasswordCryptoConf);
+            return StructuralComparisons.StructuralEqualityComparer.Equals(pwKey, userRecord.PasswordKey);
         }
     }
 }

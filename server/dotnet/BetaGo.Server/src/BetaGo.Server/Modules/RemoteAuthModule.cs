@@ -21,7 +21,7 @@ namespace BetaGo.Server.Modules
 
                 try
                 {
-                    // TODO: Validate parameters!
+                    // Validate parameters!
 
                     // Valdiate username length, charset
                     if (req.Username.Length < 4)
@@ -70,15 +70,34 @@ namespace BetaGo.Server.Modules
 
                 var selectedUser = WebUserManager.FindUserByUsername(req.Username);
 
-                //TODO
-                throw new SecurityException();
-
-                // Return user details
-                return Response.AsJsonNet(new RemoteAuthResponse
+                try
                 {
-                    User = selectedUser,
-                    ApiKey = selectedUser.ApiKey,
-                });
+                    // Validate password
+                    if (WebUserManager.CheckPassword(req.Password, selectedUser))
+                    {
+                        // Return user details
+                        return Response.AsJsonNet(new RemoteAuthResponse
+                        {
+                            User = selectedUser,
+                            ApiKey = selectedUser.ApiKey,
+                        });
+                    }
+                    else
+                    {
+                        return new Response().WithStatusCode(HttpStatusCode.Unauthorized);
+                    }
+                }
+                catch (NullReferenceException)
+                {
+                    // A parameter was not provided
+                    return new Response().WithStatusCode(HttpStatusCode.BadRequest);
+                }
+                catch (SecurityException secEx)
+                {
+                    // Registration blocked for security reasons
+                    return Response.AsText(secEx.Message)
+                        .WithStatusCode(HttpStatusCode.Unauthorized);
+                }
             });
         }
     }
