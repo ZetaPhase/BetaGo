@@ -45,7 +45,7 @@ namespace BetaGo.Server.Modules
                     var newU = WebUserManager.RegisterUser(req);
 
                     // Return just the 200 for now
-                    return Response.AsJsonNet(new RegistrationResponse
+                    return Response.AsJsonNet(new RemoteAuthResponse
                     {
                         User = newU,
                         ApiKey = newU.ApiKey,
@@ -62,6 +62,11 @@ namespace BetaGo.Server.Modules
                     return Response.AsText(secEx.Message)
                         .WithStatusCode(HttpStatusCode.Unauthorized);
                 }
+            });
+
+            Post("/login", args =>
+            {
+                
             });
         }
     }

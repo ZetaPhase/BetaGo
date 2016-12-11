@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace BetaGo.Server.DataModels.Registration
 {
-    public class RegistrationResponse
+    public class RemoteAuthResponse
     {
         [JsonProperty("user")]
         public RegisteredUser User { get; set; }
