@@ -65,18 +65,40 @@ Example response:
 ```json
 {
   "user": {
-    "username": "SomeBody",
+    "username": "BoeTheBeast",
     "phoneNumber": "18004567890"
   },
   "apikey": "W2ThJ7xqtB3znyj7g0KF4jU2HJbcqdg1Un8eLXAV"
 }
 ```
 
+#### Account details querying
+
+`/api/userinfo`* (GET) - Retrieves user info in JSON format.
+
+Response type:
+
+User details will be returned in JSON format.
+
+Example:
+
+```json
+{
+  "username": "BoeTheBeast",
+  "phoneNumber": "18004567890"
+}
+```
+
+This route can be used to retrieve information about the user. Additional fields may be
+added in future versions of the server.
+
 ##### API Registration Tips
 
 After registering an account through the API, be sure to save the user's `apikey`.
 This will act as a fully privileged access token to the user's account. 
 
-
+When performing subsequent actions in the application, this API Key can be
+supplied to API routes that require authentication to authenticate on behalf
+of the user.
 
 Copyright &copy; 2016 0xFireball
