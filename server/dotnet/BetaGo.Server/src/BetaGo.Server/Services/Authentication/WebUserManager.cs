@@ -13,22 +13,25 @@ namespace BetaGo.Server.Services.Authentication
     /// </summary>
     public static class WebUserManager
     {
-        public static RegisteredUser FindUserByUsername(string username)
+        public static async Task<RegisteredUser> FindUserByUsernameAsync(string username)
         {
-            RegisteredUser storedUserRecord = null;
-            var db = new DatabaseAccessService().OpenOrCreateDefault();
-            var registeredUsers = db.GetCollection<RegisteredUser>(DatabaseAccessService.UsersCollectionDatabaseKey);
-            var userRecord = registeredUsers.FindOne(u => u.Username == username);
-            storedUserRecord = userRecord;
-
-            if (storedUserRecord == null)
+            return await Task.Run(() =>
             {
-                return null;
-            }
-            return storedUserRecord;
+                RegisteredUser storedUserRecord = null;
+                var db = new DatabaseAccessService().OpenOrCreateDefault();
+                var registeredUsers = db.GetCollection<RegisteredUser>(DatabaseAccessService.UsersCollectionDatabaseKey);
+                var userRecord = registeredUsers.FindOne(u => u.Username == username);
+                storedUserRecord = userRecord;
+
+                if (storedUserRecord == null)
+                {
+                    return null;
+                }
+                return storedUserRecord;
+            });
         }
 
-        public static RegisteredUser FindUserByApiKey(string apiKey)
+        public static RegisteredUser FindUserByApiKeyAsync(string apiKey)
         {
             RegisteredUser storedUserRecord = null;
             var db = new DatabaseAccessService().OpenOrCreateDefault();
@@ -67,7 +70,7 @@ namespace BetaGo.Server.Services.Authentication
         private static RegisteredUser RegisterUser(RegistrationRequest regRequest)
         {
             RegisteredUser newUserRecord = null;
-            if (FindUserByUsername(regRequest.Username) != null)
+            if (FindUserByUsernameAsync(regRequest.Username) != null)
             {
                 //BAD! Another conflicting user exists!
                 throw new SecurityException("A user with the same username already exists!");

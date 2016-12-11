@@ -68,7 +68,7 @@ namespace BetaGo.Server.Modules
             {
                 var req = this.Bind<LoginRequest>();
 
-                var selectedUser = WebUserManager.FindUserByUsername(req.Username);
+                var selectedUser = await WebUserManager.FindUserByUsernameAsync(req.Username);
 
                 try
                 {
