@@ -5,7 +5,7 @@ An open source virtual tourism app using augmented reality (currently Android on
 
 # About
 
-- Somewhat inspired by Pokemon Go by Niantic Inc
+- This project was created by `xeliot` (Dave Ho), who was inspired by Pokemon Go by Niantic Inc
 
 ## Architecture
 
