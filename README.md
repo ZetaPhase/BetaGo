@@ -67,11 +67,12 @@ The server API documentation is in `docs/devnotes/dotnet-server-api.md`
 1. Run a server implementation that is supported by the app
 1. You should be all set. 
 
-## Tutorials
+## Read More
 
-Check out my blog for some tutorials on Google Maps V2 Android
+Check out our blogs for more!
 
-- <http://principal-programming-fundamentals.blogspot.com/>
+- Xeliot's blog - <http://principal-programming-fundamentals.blogspot.com/>
+- 0xFireball's blog - <https://blog.iridiumion.xyz/>
 
 ## License and Copyrights
 
