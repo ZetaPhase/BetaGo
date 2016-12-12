@@ -3,7 +3,7 @@
 
 By 0xFireball (Nihal Talur)
 
-Specification version `v0.1.0.1`.
+Specification version `v0.1.1`.
 This version ID will be updated as the specification changes.
 API clients will be required to adapt to API changes, and backwards
 compatibility is not guaranteed.
@@ -64,6 +64,32 @@ Response type:
 
 Assuming a valid request, the server will send a JSON response containing
 information about the newly registered user.
+
+Example response:
+
+```json
+{
+  "user": {
+    "username": "BoeTheBeast",
+    "phoneNumber": "18004567890"
+  },
+  "apikey": "W2ThJ7xqtB3znyj7g0KF4jU2HJbcqdg1Un8eLXAV"
+}
+```
+
+#### Account Login
+
+`/login` (POST) - Logs in to an existing account.
+
+Parameters:
+
+`username` - The username
+
+`password` - The password
+
+Response:
+
+A JSON response with user details.
 
 Example response:
 
