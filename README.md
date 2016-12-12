@@ -69,9 +69,12 @@ The server API documentation is in `docs/devnotes/dotnet-server-api.md`
 
 ## Read More
 
-Check out our blogs for more!
+Check out my blog for more!
 
 - Xeliot's blog - <http://principal-programming-fundamentals.blogspot.com/>
+
+In addition, check out my friend's blog!
+
 - 0xFireball's blog - <https://blog.iridiumion.xyz/>
 
 ## License and Copyrights
