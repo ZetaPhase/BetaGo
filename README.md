@@ -59,17 +59,13 @@ For now, we're still using the Python server, but plan to eventually
 replace it with flask server and sqlite for convenience and simplicity
 or use ASP.NET Core server for scalability and performance.
 
-The server API documentation is in `/docs/devnotes/dotnet-server-api.md`
+The server API documentation is in `docs/devnotes/dotnet-server-api.md`
 
 ## Quick Start For Developers
 
-BetaGo was developed using Android Studio
-
-- <https://developer.android.com/studio/index.html?gclid=Cj0KEQjwztG8BRCJgseTvZLctr8BEiQAA_kBD8iqav_IkrM0sgLT7b1XJBAHE_Us2n-48onMabU9NDsaAsig8P8HAQ>
-
-BetaGo was also built using Google Maps V2 Android
-
-- <https://developers.google.com/maps/documentation/android-api/start>
+1. Run an app implementation on a device
+1. Run a server implementation that is supported by the app
+1. You should be all set. 
 
 ## Tutorials
 
