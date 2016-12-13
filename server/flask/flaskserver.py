@@ -69,6 +69,8 @@ def getDetail():
 @app.route("/getTitle", methods=["GET", "POST"])
 def getTitle():
     if request.method == "GET":
+        conn = sqlite3.connect('database.db')
+        c = conn.cursor()
         # need to return full details back to android user from database
         print "someone got some title"
         return "You have gotten some title"
