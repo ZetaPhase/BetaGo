@@ -63,6 +63,9 @@ def getDetail():
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
         # need to return titles back to android user from database
+        """
+        
+        """
         print "someone got some detail"
         return "You have gotten some detail"
 
