@@ -63,13 +63,23 @@ def getDetail():
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
         # need to return titles back to android user from database
+        """
+        Android User Given: Zip Code of Current User Location
+        What Server Needs to return: Given zip code of current user location, give back set of paths within that location using json
+        """
         print "someone got some detail"
         return "You have gotten some detail"
 
 @app.route("/getTitle", methods=["GET", "POST"])
 def getTitle():
     if request.method == "GET":
+        conn = sqlite3.connect('database.db')
+        c = conn.cursor()
         # need to return full details back to android user from database
+        """
+        Android User Given: Phone + title of path selected
+        What Server Needs to return: given phone and title of path return the dictionary json of that path
+        """
         print "someone got some title"
         return "You have gotten some title"
 
