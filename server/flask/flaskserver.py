@@ -76,6 +76,10 @@ def getTitle():
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
         # need to return full details back to android user from database
+        """
+        Android User Given: Phone + title of path selected
+        What Server Needs to return: given phone and title of path return the dictionary json of that path
+        """
         print "someone got some title"
         return "You have gotten some title"
 
