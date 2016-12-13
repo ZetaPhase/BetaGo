@@ -18,7 +18,7 @@ namespace BetaGo.Server.Services.Authentication
             return await Task.Run(() =>
             {
                 RegisteredUser storedUserRecord = null;
-                var db = new DatabaseAccessService().OpenOrCreateDefault();
+                var db = DatabaseAccessService.OpenOrCreateDefault();
                 var registeredUsers = db.GetCollection<RegisteredUser>(DatabaseAccessService.UsersCollectionDatabaseKey);
                 var userRecord = registeredUsers.FindOne(u => u.Username == username);
                 storedUserRecord = userRecord;
@@ -34,7 +34,7 @@ namespace BetaGo.Server.Services.Authentication
         public static RegisteredUser FindUserByApiKeyAsync(string apiKey)
         {
             RegisteredUser storedUserRecord = null;
-            var db = new DatabaseAccessService().OpenOrCreateDefault();
+            var db = DatabaseAccessService.OpenOrCreateDefault();
             var registeredUsers = db.GetCollection<RegisteredUser>(DatabaseAccessService.UsersCollectionDatabaseKey);
             var userRecord = registeredUsers.FindOne(u => u.ApiKey == apiKey);
             storedUserRecord = userRecord;
@@ -49,7 +49,7 @@ namespace BetaGo.Server.Services.Authentication
         public static bool UpdateUserInDatabase(RegisteredUser currentUser)
         {
             bool result;
-            var db = new DatabaseAccessService().OpenOrCreateDefault();
+            var db = DatabaseAccessService.OpenOrCreateDefault();
             var registeredUsers = db.GetCollection<RegisteredUser>(DatabaseAccessService.UsersCollectionDatabaseKey);
             using (var trans = db.BeginTrans())
             {
@@ -75,7 +75,7 @@ namespace BetaGo.Server.Services.Authentication
                 //BAD! Another conflicting user exists!
                 throw new SecurityException("A user with the same username already exists!");
             }
-            var db = new DatabaseAccessService().OpenOrCreateDefault();
+            var db = DatabaseAccessService.OpenOrCreateDefault();
             var registeredUsers = db.GetCollection<RegisteredUser>(DatabaseAccessService.UsersCollectionDatabaseKey);
             using (var trans = db.BeginTrans())
             {
