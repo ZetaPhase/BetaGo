@@ -35,11 +35,13 @@ def hello():
 
 @app.route("/json", methods=['GET', 'POST'])
 def json():
+    print"start"
     dickeys = request.form.keys()
     dic = ast.literal_eval(dickeys[0])
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
     try:
+        print "trying"
         c.execute("INSERT INTO users VALUES('"+dic['phone']+"', '"+dic['phone']+"')")
     except sqlite3.IntegrityError:
         pass
@@ -47,6 +49,7 @@ def json():
     # Needs try and except block
     c.execute('SELECT COUNT(pid) FROM path')
     count = c.fetchone()[0]
+    print "path done"
     c.execute("INSERT INTO path VALUES('"+str(count)+"', '"+dic['phone']+"', '"+dic['title']+"', '"+dic['zipCodeList'][0]+"')")   
     for i in range(0, len(dic['lat'])):
         c.execute("INSERT INTO points VALUES('"+str(count)+"', '"+str(dic['lat'][i])+"', '"+str(dic['lng'][i])+"', '"+str(i)+"')")
@@ -55,6 +58,7 @@ def json():
         c.execute("INSERT INTO markers VALUES('"+str(count)+"', '"+str(dic['markerMap'][key]['lat'])+"', '"+str(dic['markerMap'][key]['lng'])+"', '"+dic['markerMap'][key]['description']+"', '"+dic['markerMap'][key]['image']+"')")
     conn.commit()
     conn.close()
+    print "end"
     return request.json
 
 @app.route("/getDetail", methods=["GET", "POST"])
@@ -66,7 +70,11 @@ def getDetail():
         """
         Android User Given: Zip Code of Current User Location
         What Server Needs to return: Given zip code of current user location, give back set of paths within that location using json
+        use paths table
         """
+        '''
+        for row in c.execute('SELECT * FROM paths')
+        '''
         print "someone got some detail"
         return "You have gotten some detail"
 
@@ -79,6 +87,7 @@ def getTitle():
         """
         Android User Given: Phone + title of path selected
         What Server Needs to return: given phone and title of path return the dictionary json of that path
+        user users table        
         """
         print "someone got some title"
         return "You have gotten some title"
