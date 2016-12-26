@@ -51,6 +51,11 @@ namespace BetaGo.Server.Modules
                         ApiKey = newUser.ApiKey,
                     });
                 }
+                catch (ArgumentNullException)
+                {
+                    // A parameter was not provided
+                    return new Response().WithStatusCode(HttpStatusCode.BadRequest);
+                }
                 catch (NullReferenceException)
                 {
                     // A parameter was not provided
@@ -86,6 +91,11 @@ namespace BetaGo.Server.Modules
                     {
                         return new Response().WithStatusCode(HttpStatusCode.Unauthorized);
                     }
+                }
+                catch (ArgumentNullException)
+                {
+                    // A parameter was not provided
+                    return new Response().WithStatusCode(HttpStatusCode.BadRequest);
                 }
                 catch (NullReferenceException)
                 {
