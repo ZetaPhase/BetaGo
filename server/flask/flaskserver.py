@@ -57,8 +57,8 @@ def json():
     conn.close()
     return request.json
 
-@app.route("/getDetail", methods=["GET", "POST"])
-def getDetail():
+@app.route("/getTitle", methods=["GET", "POST"])
+def getTitle():
     if request.method == "GET":
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
@@ -78,8 +78,8 @@ def getDetail():
         print "someone got some detail"
         return "You have gotten some detail"
 
-@app.route("/getTitle", methods=["GET", "POST"])
-def getTitle():
+@app.route("/getDetail", methods=["GET", "POST"])
+def getDetail():
     if request.method == "GET":
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
@@ -87,7 +87,12 @@ def getTitle():
         """
         Android User Given: Phone + title of path selected
         What Server Needs to return: given phone and title of path return the dictionary json of that path
-        user users table        
+        user users table
+        '''
+        path_id = SELECT pid FROM paths WHERE user==(get phone from url params) and title==(get title from url params)
+        points = SELECT * FROM points WHERE pid==path_id
+        markers = SELECT * FROM markers WHERE pid==path_id
+        '''
         """
         print "someone got some title"
         return "You have gotten some title"
