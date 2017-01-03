@@ -59,26 +59,22 @@ def json():
 
 @app.route("/getTitle", methods=["GET", "POST"])
 def getTitle():
+    """
+    Android User Given: Zip Code of Current User Location
+    What Server Needs to return: Given zip code of current user location, give back set of paths within that location using json
+    use paths table
+    """
     if request.method == "GET":
-        zipcode = request.args.get('zip')
-        print zipcode
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
+        zipcode = str(request.args.get('zip'))
         # need to return titles back to android user from database
         resultString = ""
-        """
-        Android User Given: Zip Code of Current User Location
-        What Server Needs to return: Given zip code of current user location, give back set of paths within that location using json
-        use paths table
-        """
-        '''
-        for row in c.execute('SELECT * FROM path WHERE zip==(getzipcode from url params of json request)'):
-            resultString += row + '\n'
-            
-        return resultString
-        '''
+        for row in c.execute("SELECT * FROM path WHERE zip="+zipcode):
+            resultString += str(row[1])+"_"+str(row[2])+"\n"
+        print resultString
         print "someone got some detail"
-        return "You have gotten some detail"
+        return resultString
 
 @app.route("/getDetail", methods=["GET", "POST"])
 def getDetail():
