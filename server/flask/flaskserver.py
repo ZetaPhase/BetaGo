@@ -61,6 +61,8 @@ def json():
 @app.route("/getTitle", methods=["GET", "POST"])
 def getTitle():
     if request.method == "GET":
+        zipcode = request.args.get('zip')
+        print zipcode
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
         # need to return titles back to android user from database
@@ -71,7 +73,7 @@ def getTitle():
         use paths table
         """
         '''
-        for row in c.execute('SELECT * FROM paths WHERE zip==(getzipcode from url params of json request)'):
+        for row in c.execute('SELECT * FROM path WHERE zip==(getzipcode from url params of json request)'):
             resultString += row + '\n'
             
         return resultString
