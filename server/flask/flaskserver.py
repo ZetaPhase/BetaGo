@@ -14,7 +14,6 @@ from flask import g
 from flask import request
 from flask import jsonify
 from werkzeug.datastructures import ImmutableMultiDict
-from urlparse import urlparse
 import ast
 
 app = Flask(__name__)
