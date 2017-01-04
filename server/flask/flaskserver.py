@@ -10,10 +10,7 @@ Created on Tue Oct 25 14:49:32 2016
 import sqlite3
 import flask
 from flask import Flask
-from flask import g
 from flask import request
-from flask import jsonify
-from werkzeug.datastructures import ImmutableMultiDict
 import ast
 
 app = Flask(__name__)
