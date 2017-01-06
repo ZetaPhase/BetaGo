@@ -79,8 +79,9 @@ def getDetail():
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
         # need to return full details back to android user from database
-        phone = str(request.args.get('phone'))
-        title = str(request.args.get('title'))
+        phone = str(request.args.get('phonenumber'))
+        titleid = str(request.args.get('id'))
+        path_id = c.execute('SELECT pid FROM paths WHERE user==phone AND title==titleid')
         """
         Android User Given: Phone + title of path selected
         What Server Needs to return: given phone and title of path return the dictionary json of that path
