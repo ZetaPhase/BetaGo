@@ -75,25 +75,23 @@ def getTitle():
 
 @app.route("/getDetail", methods=["GET", "POST"])
 def getDetail():
+    """
+    Example JSON Call: http://192.168.1.65/getDetail?phonenumber=14083346432&id=hi
+    Android User Given: Phone + title of path selected
+    What Server Needs to return: given phone and title of path return the dictionary json of that path
+    user users table
+    """
     if request.method == "GET":
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
         # need to return full details back to android user from database
         phone = str(request.args.get('phonenumber'))
         titleid = str(request.args.get('id'))
+        print phone
+        print titleid
         path_id = c.execute('SELECT pid FROM paths WHERE user='+phone+' AND title='+titleid)
         points = c.execute('SELECT * FROM points WHERE pid='+path_id)
         markers = c.execute('SELECT * FROM markers WHERE pid='+path_id)        
-        """
-        Android User Given: Phone + title of path selected
-        What Server Needs to return: given phone and title of path return the dictionary json of that path
-        user users table
-        '''
-        path_id = SELECT pid FROM paths WHERE user==(get phone from url params) and title==(get title from url params)
-        points = SELECT * FROM points WHERE pid==path_id
-        markers = SELECT * FROM markers WHERE pid==path_id
-        '''
-        """
         print "someone got some title"
         return "You have gotten some title"
 
