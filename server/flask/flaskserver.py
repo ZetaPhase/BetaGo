@@ -57,6 +57,7 @@ def json():
 @app.route("/getTitle", methods=["GET", "POST"])
 def getTitle():
     """
+    Example JSON Call: http://192.168.1.65/getTitle?zip=95135
     Android User Given: Zip Code of Current User Location
     What Server Needs to return: Given zip code of current user location, give back set of paths within that location using json
     use paths table
