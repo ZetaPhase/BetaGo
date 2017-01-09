@@ -90,8 +90,11 @@ def getDetail():
         titleid = str(request.args.get('id'))
         print phone
         print titleid
-        path_id = c.execute('SELECT pid FROM paths WHERE user='+phone+' AND title='+titleid)
-        points = c.execute('SELECT * FROM points WHERE pid='+path_id)
+        c.execute('SELECT pid FROM paths WHERE user='+phone+' AND title='+titleid)
+        path_id = c.fetchone()[0]
+        points_list = []
+        for row in c.execute('SELECT lat, lng, order FROM points WHERE pid='+path_id):
+            points_list.append(row)
         markers = c.execute('SELECT * FROM markers WHERE pid='+path_id)        
         print "someone got some title"
         return "You have gotten some title"
