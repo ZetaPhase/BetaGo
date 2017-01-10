@@ -93,7 +93,7 @@ def getDetail():
         c.execute('SELECT pid FROM paths WHERE user='+phone+' AND title='+titleid)
         path_id = c.fetchone()[0]
         points_list = []
-        for row in c.execute('SELECT lat, lng, order FROM points WHERE pid='+path_id):
+        for row in c.execute('SELECT lat, lng FROM points WHERE pid='+path_id+"ORDER BY 'order'"):
             points_list.append(row)
         markers = c.execute('SELECT * FROM markers WHERE pid='+path_id)        
         print "someone got some title"
