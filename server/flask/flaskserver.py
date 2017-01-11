@@ -95,7 +95,9 @@ def getDetail():
         points_list = []
         for row in c.execute('SELECT lat, lng FROM points WHERE pid='+path_id+"ORDER BY 'order'"):
             points_list.append(row)
-        markers = c.execute('SELECT * FROM markers WHERE pid='+path_id)        
+        marker_list = []
+        for row in c.execute('SELECT lat, lng, description, image FROM markers WHERE pid='+path_id+"ORDER BY 'order'"):
+            marker_list.append(row)      
         print "someone got some title"
         return "You have gotten some title"
 
