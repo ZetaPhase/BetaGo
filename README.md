@@ -1,5 +1,6 @@
 
 # BetaGo
+![Logo](/misc/logo.PNG)
 
 An open source virtual tourism app using augmented reality (currently Android only!)
 
