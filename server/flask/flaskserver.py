@@ -6,6 +6,8 @@ Created on Tue Oct 25 14:49:32 2016
 """
 
 #HOST&&PORT: http://127.0.0.1:5000/
+#COMP1: 192.168.1.54
+#COMP2: 192.168.1.77
 
 import sqlite3
 import flask
@@ -90,15 +92,17 @@ def getDetail():
         titleid = str(request.args.get('id'))
         print phone
         print titleid
-        c.execute('SELECT pid FROM paths WHERE user='+phone+' AND title='+titleid)
+        c.execute('SELECT pid FROM path WHERE name='+phone+' AND title='+titleid)
         path_id = c.fetchone()[0]
         points_list = []
-        for row in c.execute('SELECT lat, lng FROM points WHERE pid='+path_id+"ORDER BY 'order'"):
+        for row in c.execute('SELECT lat, lng FROM points WHERE pid='+str(path_id)+" ORDER BY 'order'"):
             points_list.append(row)
         marker_list = []
-        for row in c.execute('SELECT lat, lng, description, image FROM markers WHERE pid='+path_id+"ORDER BY 'order'"):
+        for row in c.execute('SELECT lat, lng, description, image FROM markers WHERE pid='+str(path_id)+" ORDER BY 'order'"):
             marker_list.append(row)      
         print "someone got some title"
+        print points_list
+        print marker_list
         return "You have gotten some title"
 
 
