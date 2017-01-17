@@ -103,6 +103,12 @@ def getDetail():
         print "someone got some title"
         print points_list
         print marker_list
+        #need to return marker_list and points_list in back in the form of json
+        lat = []
+        lng = []
+        for coordinate in points_list:
+            lat.append(coordinate[0])
+            lng.append(coordinate[1])
         return "You have gotten some title"
 
 
