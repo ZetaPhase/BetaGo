@@ -11,6 +11,7 @@ Created on Tue Oct 25 14:49:32 2016
 
 import sqlite3
 import flask
+import json
 from flask import Flask
 from flask import request
 import ast
@@ -103,12 +104,16 @@ def getDetail():
         print "someone got some title"
         print points_list
         print marker_list
-        #need to return marker_list and points_list in back in the form of json
         lat = []
         lng = []
         for coordinate in points_list:
             lat.append(coordinate[0])
             lng.append(coordinate[1])
+        jsondic = {}
+        jsondic["lat"] = lat
+        jsondic["lng"] = lng
+
+
         return "You have gotten some title"
 
 
