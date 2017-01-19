@@ -132,10 +132,10 @@ def getDetail():
         #jsondic["title"] = titleid
         jsondic["zipCodeList"] = zipCodeList        
         
-        print mjson.dumps(jsondic)
-        print type(mjson.dumps(jsondic))
+        #print mjson.dumps(jsondic)
+        #print type(mjson.dumps(jsondic))
 
-        return jsondic
+        return mjson.dumps(jsondic)
 
 
 

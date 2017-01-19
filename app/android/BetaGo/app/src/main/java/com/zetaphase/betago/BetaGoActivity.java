@@ -422,7 +422,7 @@ public class BetaGoActivity extends FragmentActivity implements OnMapReadyCallba
                                 final Double mlng = jObj.getDouble("lng");
                                 final String description = jObj.getString("description");
                                 final String image = jObj.getString("image");
-                                Log.d("MARKERIMAGE", markerMap.getString(key));
+                                Log.d("MARKERIMAGE", image);
                                 imageMap.clear();
                                 imageMap.put(key + ".jpg", image);
                                 BetaGoActivity.this.runOnUiThread(new Runnable() {
