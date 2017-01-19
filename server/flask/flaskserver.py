@@ -89,10 +89,12 @@ def getDetail():
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
         # need to return full details back to android user from database
-        phone = str(request.args.get('phoneNumber'))
-        titleid = str(request.args.get('id'))
+        phone = "\"" + str(request.args.get('phoneNumber')) + "\""
+        titleid = "\"" + str(request.args.get('id')) + "\""
         print phone
+        print type(phone)
         print titleid
+        print type(titleid)
         c.execute('SELECT pid, zip FROM path WHERE name='+phone+' AND title='+titleid)
         tmp = c.fetchone()
         path_id = tmp[0]
@@ -133,7 +135,7 @@ def getDetail():
         print mjson.dumps(jsondic)
         print type(mjson.dumps(jsondic))
 
-        return "You have gotten some detail"
+        return jsondic
 
 
 

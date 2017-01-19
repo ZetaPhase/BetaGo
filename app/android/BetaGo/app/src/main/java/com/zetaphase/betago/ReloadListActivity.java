@@ -43,7 +43,7 @@ public class ReloadListActivity extends AppCompatActivity {
         Log.d("LINES", String.valueOf(lines));
         Log.d("LINES", String.valueOf(lines.length));
         for (int i = 0; i < lines.length; i++) {
-            myLines[i] = lines[i].substring(12);
+            myLines[i] = lines[i].substring(13);
         }
         Log.d("MYLINES", String.valueOf(myLines));
 
