@@ -68,7 +68,7 @@ def getTitle():
     if request.method == "GET":
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
-        zipcode = str(request.args.get('zip'))
+        zipcode = str(request.args.get('zipCode'))
         # need to return titles back to android user from database
         resultString = ""
         for row in c.execute("SELECT * FROM path WHERE zip="+zipcode):
@@ -89,7 +89,7 @@ def getDetail():
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
         # need to return full details back to android user from database
-        phone = str(request.args.get('phonenumber'))
+        phone = str(request.args.get('phoneNumber'))
         titleid = str(request.args.get('id'))
         print phone
         print titleid
@@ -126,7 +126,7 @@ def getDetail():
             count += 1
         
         jsondic["markerMap"] = markerMap
-        jsondic["phone"] = str(phone)
+        #jsondic["phone"] = str(phone)
         #jsondic["title"] = titleid
         jsondic["zipCodeList"] = zipCodeList        
         
