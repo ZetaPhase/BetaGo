@@ -11,7 +11,7 @@ Created on Tue Oct 25 14:49:32 2016
 
 import sqlite3
 import flask
-import json
+import json as mjson
 from flask import Flask
 from flask import request
 import ast
@@ -74,7 +74,7 @@ def getTitle():
         for row in c.execute("SELECT * FROM path WHERE zip="+zipcode):
             resultString += str(row[1])+"_"+str(row[2])+"\n"
         print resultString
-        print "someone got some detail"
+        print "someone got some title"
         return resultString
 
 @app.route("/getDetail", methods=["GET", "POST"])
@@ -93,17 +93,19 @@ def getDetail():
         titleid = str(request.args.get('id'))
         print phone
         print titleid
-        c.execute('SELECT pid FROM path WHERE name='+phone+' AND title='+titleid)
-        path_id = c.fetchone()[0]
+        c.execute('SELECT pid, zip FROM path WHERE name='+phone+' AND title='+titleid)
+        tmp = c.fetchone()
+        path_id = tmp[0]
+        zipCodeList = [tmp[1]]
         points_list = []
         for row in c.execute('SELECT lat, lng FROM points WHERE pid='+str(path_id)+" ORDER BY 'order'"):
             points_list.append(row)
         marker_list = []
         for row in c.execute('SELECT lat, lng, description, image FROM markers WHERE pid='+str(path_id)+" ORDER BY 'order'"):
             marker_list.append(row)      
-        print "someone got some title"
-        print points_list
-        print marker_list
+        print "someone got some detail"
+        #print points_list
+        #print marker_list
         lat = []
         lng = []
         for coordinate in points_list:
@@ -112,9 +114,26 @@ def getDetail():
         jsondic = {}
         jsondic["lat"] = lat
         jsondic["lng"] = lng
+        count = 1;
+        markerMap = {}
+        for marker in marker_list:
+            snap = {}
+            snap["lat"] = marker[0]
+            snap["lng"] = marker[1]
+            snap["description"] = marker[2]
+            snap["image"] = marker[3]
+            markerMap["Snap"+str(count)] = snap
+            count += 1
+        
+        jsondic["markerMap"] = markerMap
+        jsondic["phone"] = str(phone)
+        #jsondic["title"] = titleid
+        jsondic["zipCodeList"] = zipCodeList        
+        
+        print mjson.dumps(jsondic)
+        print type(mjson.dumps(jsondic))
 
-
-        return "You have gotten some title"
+        return "You have gotten some detail"
 
 
 
