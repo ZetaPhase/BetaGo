@@ -20,6 +20,7 @@ app = Flask(__name__)
 
 DATABASE = 'database.db'
 
+#Tester
 @app.route("/", methods=["GET", "POST"])
 def hello():
     #if request.method == "GET":
@@ -37,14 +38,13 @@ def hello():
 def json():
     dickeys = request.form.keys()
     dic = ast.literal_eval(dickeys[0])
-    conn = sqlite3.connect('database.db')
+    conn = sqlite3.connect(DATABASE)
     c = conn.cursor()
+    #users cannot be duplicate
     try:
         c.execute("INSERT INTO users VALUES('"+dic['phone']+"', '"+dic['phone']+"')")
     except sqlite3.IntegrityError:
         pass
-    #c.execute("INSERT INTO users VALUES('"+dic['phone']+"', '"+dic['phone']+"')")
-    # Needs try and except block
     c.execute('SELECT COUNT(pid) FROM path')
     count = c.fetchone()[0]
     c.execute("INSERT INTO path VALUES('"+str(count)+"', '"+dic['phone']+"', '"+dic['title']+"', '"+dic['zipCodeList'][0]+"')")   
@@ -66,15 +66,13 @@ def getTitle():
     use paths table
     """
     if request.method == "GET":
-        conn = sqlite3.connect('database.db')
+        conn = sqlite3.connect(DATABASE)
         c = conn.cursor()
         zipcode = str(request.args.get('zipCode'))
         # need to return titles back to android user from database
         resultString = ""
         for row in c.execute("SELECT * FROM path WHERE zip="+zipcode):
             resultString += str(row[1])+"_"+str(row[2])+"\n"
-        print resultString
-        print "someone got some title"
         return resultString
 
 @app.route("/getDetail", methods=["GET", "POST"])
@@ -86,15 +84,11 @@ def getDetail():
     user users table
     """
     if request.method == "GET":
-        conn = sqlite3.connect('database.db')
+        conn = sqlite3.connect(DATABASE)
         c = conn.cursor()
         # need to return full details back to android user from database
         phone = "\"" + str(request.args.get('phoneNumber')) + "\""
         titleid = "\"" + str(request.args.get('id')) + "\""
-        print phone
-        print type(phone)
-        print titleid
-        print type(titleid)
         c.execute('SELECT pid, zip FROM path WHERE name='+phone+' AND title='+titleid)
         tmp = c.fetchone()
         path_id = tmp[0]
@@ -105,7 +99,6 @@ def getDetail():
         marker_list = []
         for row in c.execute('SELECT lat, lng, description, image FROM markers WHERE pid='+str(path_id)+" ORDER BY 'order'"):
             marker_list.append(row)      
-        print "someone got some detail"
         lat = []
         lng = []
         for coordinate in points_list:
