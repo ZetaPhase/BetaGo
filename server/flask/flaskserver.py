@@ -106,8 +106,6 @@ def getDetail():
         for row in c.execute('SELECT lat, lng, description, image FROM markers WHERE pid='+str(path_id)+" ORDER BY 'order'"):
             marker_list.append(row)      
         print "someone got some detail"
-        #print points_list
-        #print marker_list
         lat = []
         lng = []
         for coordinate in points_list:
@@ -128,12 +126,8 @@ def getDetail():
             count += 1
         
         jsondic["markerMap"] = markerMap
-        #jsondic["phone"] = str(phone)
-        #jsondic["title"] = titleid
         jsondic["zipCodeList"] = zipCodeList        
         
-        #print mjson.dumps(jsondic)
-        #print type(mjson.dumps(jsondic))
 
         return mjson.dumps(jsondic)
 
