@@ -94,10 +94,10 @@ def getDetail():
         path_id = tmp[0]
         zipCodeList = [tmp[1]]
         points_list = []
-        for row in c.execute('SELECT lat, lng FROM points WHERE pid='+str(path_id)+" ORDER BY 'order'"):
+        for row in c.execute('SELECT lat, lng FROM points WHERE pid='+str(path_id)+" ORDER BY sequence"):
             points_list.append(row)
         marker_list = []
-        for row in c.execute('SELECT lat, lng, description, image FROM markers WHERE pid='+str(path_id)+" ORDER BY 'order'"):
+        for row in c.execute('SELECT lat, lng, description, image FROM markers WHERE pid='+str(path_id)+" ORDER BY sequence"):
             marker_list.append(row)      
         lat = []
         lng = []
