@@ -121,8 +121,8 @@ def getDetail():
         for row in c.execute('SELECT lat, lng FROM points WHERE pid='+str(path_id)+" ORDER BY sequence"):
             points_list.append(row)
         marker_list = []
-        print 'SELECT lat, lng, description, image FROM markers WHERE pid='+str(path_id)+" ORDER BY sequence"
-        for row in c.execute('SELECT lat, lng, description, image FROM markers WHERE pid='+str(path_id)+" ORDER BY sequence"):
+        print 'SELECT lat, lng, description, image FROM markers WHERE pid='+str(path_id)
+        for row in c.execute('SELECT lat, lng, description, image FROM markers WHERE pid='+str(path_id)):
             marker_list.append(row)  
         print marker_list
         lat = []
