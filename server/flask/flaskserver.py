@@ -9,6 +9,7 @@ Created on Tue Oct 25 14:49:32 2016
 #COMP1: 192.168.1.54
 #COMP2: 192.168.1.77
 
+import werkzeug.datastructures
 import sqlite3
 import flask
 import json as mjson
@@ -36,25 +37,46 @@ def hello():
 
 @app.route("/json", methods=['GET', 'POST'])
 def json():
-    dickeys = request.form.keys()
-    dic = ast.literal_eval(dickeys[0])
+    print "here"
+    parameters = str(request.form)[22:]
+    parameters = parameters[:-4]
+    #print parameters
+    dic = ast.literal_eval(parameters)
+    print dic
     conn = sqlite3.connect(DATABASE)
     c = conn.cursor()
     #users cannot be duplicate
+    print "here2"
     try:
         c.execute("INSERT INTO users VALUES('"+dic['phone']+"', '"+dic['phone']+"')")
     except sqlite3.IntegrityError:
         pass
+    
+    print "here3"
     c.execute('SELECT COUNT(pid) FROM path')
     count = c.fetchone()[0]
+    print count
     c.execute("INSERT INTO path VALUES('"+str(count)+"', '"+dic['phone']+"', '"+dic['title']+"', '"+dic['zipCodeList'][0]+"')")   
+    print "INSERT INTO path VALUES('"+str(count)+"', '"+dic['phone']+"', '"+dic['title']+"', '"+dic['zipCodeList'][0]+"')"
     for i in range(0, len(dic['lat'])):
         c.execute("INSERT INTO points VALUES('"+str(count)+"', '"+str(dic['lat'][i])+"', '"+str(dic['lng'][i])+"', '"+str(i)+"')")
+    print "here3.7"
     for i in range(0, len(dic['markerMap'].keys())):
         key = sorted(dic['markerMap'].keys())[i]
-        c.execute("INSERT INTO markers VALUES('"+str(count)+"', '"+str(dic['markerMap'][key]['lat'])+"', '"+str(dic['markerMap'][key]['lng'])+"', '"+dic['markerMap'][key]['description']+"', '"+dic['markerMap'][key]['image']+"')")
+        print key
+        print str(dic['markerMap'][key]['lat'])
+        print str(dic['markerMap'][key]['lng'])
+        print dic['markerMap'][key]['description']
+        #print dic['markerMap'][key]['image']
+        print "start"
+        c.execute("INSERT INTO markers VALUES(?, ?, ?, ?, ?)", (str(count), str(dic['markerMap'][key]['lat']), str(dic['markerMap'][key]['lng']), dic['markerMap'][key]['description'], dic['markerMap'][key]['image']))
+        print "hello"        
+        #print "INSERT INTO markers VALUES('"+str(count)+"', '"+str(dic['markerMap'][key]['lat'])+"', '"+str(dic['markerMap'][key]['lng'])+"', '"+dic['markerMap'][key]['description']+"', '"+dic['markerMap'][key]['image']+"')"
+        #c.execute("INSERT INTO markers VALUES('"+str(count)+"', '"+str(dic['markerMap'][key]['lat'])+"', '"+str(dic['markerMap'][key]['lng'])+"', '"+dic['markerMap'][key]['description']+"', '"+dic['markerMap'][key]['image']+"')")
+    print "here4"
     conn.commit()
     conn.close()
+    print "done"
     return request.json
 
 @app.route("/getTitle", methods=["GET", "POST"])
@@ -84,6 +106,7 @@ def getDetail():
     user users table
     """
     if request.method == "GET":
+        print "start"
         conn = sqlite3.connect(DATABASE)
         c = conn.cursor()
         # need to return full details back to android user from database
@@ -94,16 +117,22 @@ def getDetail():
         path_id = tmp[0]
         zipCodeList = [tmp[1]]
         points_list = []
+        print "start2"
         for row in c.execute('SELECT lat, lng FROM points WHERE pid='+str(path_id)+" ORDER BY sequence"):
             points_list.append(row)
         marker_list = []
+        print 'SELECT lat, lng, description, image FROM markers WHERE pid='+str(path_id)+" ORDER BY sequence"
         for row in c.execute('SELECT lat, lng, description, image FROM markers WHERE pid='+str(path_id)+" ORDER BY sequence"):
-            marker_list.append(row)      
+            marker_list.append(row)  
+        print marker_list
         lat = []
         lng = []
+        print marker_list
+        print points_list
         for coordinate in points_list:
             lat.append(coordinate[0])
             lng.append(coordinate[1])
+        print "hi"
         jsondic = {}
         jsondic["lat"] = lat
         jsondic["lng"] = lng
@@ -121,7 +150,7 @@ def getDetail():
         jsondic["markerMap"] = markerMap
         jsondic["zipCodeList"] = zipCodeList        
         
-
+        print mjson.dumps(jsondic)
         return mjson.dumps(jsondic)
 
 
