@@ -17,7 +17,10 @@ c.execute('''CREATE TABLE path
             (pid integer primary key not null unique, name char not null, title char not null, zip char not null)''')
             
 c.execute('''CREATE TABLE points
-            (pid integer not null, lat integer not null, lng integer not null, order integer not null unique)''')
+            (pid integer not null, lat integer not null, lng integer not null, sequence integer unique not null)''')
             
 c.execute('''CREATE TABLE markers
             (pid integer not null, lat integer not null, lng integer not null, description char not null, image char not null)''')
+            
+conn.commit()
+conn.close()
