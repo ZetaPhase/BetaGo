@@ -6,10 +6,9 @@ Created on Tue Oct 25 14:49:32 2016
 """
 
 #HOST&&PORT: http://127.0.0.1:5000/
-#COMP1: 192.168.1.54
+#COMP1: 192.168.1.65
 #COMP2: 192.168.1.77
 
-import werkzeug.datastructures
 import sqlite3
 import flask
 import json as mjson
@@ -27,13 +26,6 @@ def hello():
     #if request.method == "GET":
     print "someone said get"
     return "JJ!"
-    '''
-    if request.method == "POST":
-        content = request.get_json(silent=True)
-        print content
-        print "someone posted something"
-        return ""
-    '''
 
 @app.route("/json", methods=['GET', 'POST'])
 def json():
@@ -42,38 +34,25 @@ def json():
     parameters = parameters[:-4]
     #print parameters
     dic = ast.literal_eval(parameters)
-    print dic
     conn = sqlite3.connect(DATABASE)
     c = conn.cursor()
     #users cannot be duplicate
-    print "here2"
     try:
         c.execute("INSERT INTO users VALUES('"+dic['phone']+"', '"+dic['phone']+"')")
     except sqlite3.IntegrityError:
         pass
     
-    print "here3"
     c.execute('SELECT COUNT(pid) FROM path')
     count = c.fetchone()[0]
-    print count
     c.execute("INSERT INTO path VALUES('"+str(count)+"', '"+dic['phone']+"', '"+dic['title']+"', '"+dic['zipCodeList'][0]+"')")   
-    print "INSERT INTO path VALUES('"+str(count)+"', '"+dic['phone']+"', '"+dic['title']+"', '"+dic['zipCodeList'][0]+"')"
     for i in range(0, len(dic['lat'])):
         c.execute("INSERT INTO points VALUES('"+str(count)+"', '"+str(dic['lat'][i])+"', '"+str(dic['lng'][i])+"', '"+str(i)+"')")
     print "here3.7"
     for i in range(0, len(dic['markerMap'].keys())):
         key = sorted(dic['markerMap'].keys())[i]
-        print key
-        print str(dic['markerMap'][key]['lat'])
-        print str(dic['markerMap'][key]['lng'])
-        print dic['markerMap'][key]['description']
-        #print dic['markerMap'][key]['image']
-        print "start"
-        c.execute("INSERT INTO markers VALUES(?, ?, ?, ?, ?)", (str(count), str(dic['markerMap'][key]['lat']), str(dic['markerMap'][key]['lng']), dic['markerMap'][key]['description'], dic['markerMap'][key]['image']))
-        print "hello"        
+        c.execute("INSERT INTO markers VALUES(?, ?, ?, ?, ?)", (str(count), str(dic['markerMap'][key]['lat']), str(dic['markerMap'][key]['lng']), dic['markerMap'][key]['description'], dic['markerMap'][key]['image']))        
         #print "INSERT INTO markers VALUES('"+str(count)+"', '"+str(dic['markerMap'][key]['lat'])+"', '"+str(dic['markerMap'][key]['lng'])+"', '"+dic['markerMap'][key]['description']+"', '"+dic['markerMap'][key]['image']+"')"
         #c.execute("INSERT INTO markers VALUES('"+str(count)+"', '"+str(dic['markerMap'][key]['lat'])+"', '"+str(dic['markerMap'][key]['lng'])+"', '"+dic['markerMap'][key]['description']+"', '"+dic['markerMap'][key]['image']+"')")
-    print "here4"
     conn.commit()
     conn.close()
     print "done"
