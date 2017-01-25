@@ -85,7 +85,6 @@ def getDetail():
     user users table
     """
     if request.method == "GET":
-        print "start"
         conn = sqlite3.connect(DATABASE)
         c = conn.cursor()
         # need to return full details back to android user from database
@@ -96,22 +95,16 @@ def getDetail():
         path_id = tmp[0]
         zipCodeList = [tmp[1]]
         points_list = []
-        print "start2"
         for row in c.execute('SELECT lat, lng FROM points WHERE pid='+str(path_id)+" ORDER BY sequence"):
             points_list.append(row)
         marker_list = []
-        print 'SELECT lat, lng, description, image FROM markers WHERE pid='+str(path_id)
         for row in c.execute('SELECT lat, lng, description, image FROM markers WHERE pid='+str(path_id)):
             marker_list.append(row)  
-        print marker_list
         lat = []
         lng = []
-        print marker_list
-        print points_list
         for coordinate in points_list:
             lat.append(coordinate[0])
             lng.append(coordinate[1])
-        print "hi"
         jsondic = {}
         jsondic["lat"] = lat
         jsondic["lng"] = lng
@@ -136,4 +129,3 @@ def getDetail():
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=80)
-    #app.run(host='0.0.0.0',port="80")
